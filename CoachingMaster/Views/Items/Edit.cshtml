@@ -1,0 +1,283 @@
+﻿@model MROCoatching.DataObjects.Models.CoachingTable.Items
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MROCoatching.DataObjects.DropDown;
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+
+    fieldset {
+        border: 1px solid #005580;
+        padding: 3px;
+    }
+
+    legend {
+        font-family: 'Wide Latin';
+        font-size: small;
+    }
+</style>
+<link rel="stylesheet" href="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+<link href="~/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-body">
+
+            <form id="items" class="form-horizontal">
+
+                @Html.AntiForgeryToken()
+                <div class="callout callout-danger error-box-holder" id="general-error" style="display:none">
+                    <h4> Please correct the following errors and sumbit again </h4>
+                    <ul id="errors" class="error-box"></ul>
+                </div>
+                @Html.ValidationSummary(true)
+                @if (ViewBag.Message != null)
+                {
+                    <p style="color: red">@ViewBag.Message</p>
+                }
+                <fieldset class="col-sm-12">
+                    <div class="row col-sm-12">
+                        <input asp-for="Id" hidden />
+                        <input asp-for="Taskcount" hidden />
+                        <div class="col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row ">
+                                        <label asp-for="Refnumber" class="form-group col-sm-4"></label>
+                                        <input asp-for="Refnumber" class="form-control col-sm-2" readonly/>
+                                        <span asp-validation-for="Refnumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row ">
+                                        <label asp-for="Plcode" class="form-group col-sm-4"></label>
+                                        <div class="col-sm-3">
+                                            <select asp-for="Plcode" class="form-control col-sm-12 select2" asp-items="@ViewBag.Plcode">
+                                                <option value="">----------</option>
+                                            </select>
+                                        </div>
+                                        <input id="Plname" class="form-control col-sm-5" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Plcode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Pltypes" class="form-control-label col-sm-4"></label>
+                                        <input asp-for="Pltypes" class="form-control col-sm-8" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Pltypes" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Taskcode" class="form-control-label col-sm-4"></label>
+                                        <div class="col-sm-3">
+                                            <select asp-for="Taskcode" class="form-control col-sm-12 select2" asp-items="@ViewBag.Taskcode">
+                                                <option value="">----------</option>
+                                            </select>
+                                        </div>
+                                        <input id="Taskname" class="form-control col-sm-5" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Taskcode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-12">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Description" class="form-control-label  col-sm-2"></label>
+                                        <textarea asp-for="Description" class="form-control col-sm-10"></textarea>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+                <div class="row cols-m-12">
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="ERNAM" class="form-control-label col-sm-4"></label>
+                                <input asp-for="ERNAM" class="form-control col-sm-8" type="text" readonly />
+                                <span asp-validation-for="ERNAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="ERDAT" class="form-control-label col-sm-4"></label>
+                                <input asp-for="ERDAT" class="form-control col-sm-8" type="text" readonly />
+                                <span asp-validation-for="ERNAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row cols-m-12">
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="AENAM" class="form-control-label col-sm-4"></label>
+                                <input asp-for="AENAM" class="form-control col-sm-8" type="text" value="@User.Identity.Name" readonly />
+                                <span asp-validation-for="AENAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="AEDAT" class="form-control-label col-sm-4"></label>
+                                <input asp-for="AEDAT" class="form-control col-sm-8" type="text" value="@DateTime.UtcNow" readonly />
+                                <span asp-validation-for="AEDAT" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br /> 
+                <div class="form-group col-12 text-center">
+                    <button type="button" id="submit" class="btn btn-success col-sm-4"> Save </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+<script src="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script>
+
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        })
+    });
+
+    $(document).ready(function () {
+        let dateObj = new Date();
+        $('.date-field').datepicker(
+            {
+                format: 'mm/dd/yyyy',
+                startDate: dateObj,
+                autoclose: true
+            }).datepicker("setDate", dateObj);
+        $('.select2').select2();
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                $('#submit').click();//Trigger search button click event
+            }
+        });
+        $("#Taskname").val(($("#Taskcode").val() != "") ? $("#Taskcode option:selected").text() : "");
+        $("#Taskcode").change(function () {
+            debugger;
+            if ($("#Taskcode").val() != null) {
+                var url = "/CoachingMaster/Items/Gettask?Taskcode=" + $("#Taskcode").val();
+                $.get(url, function (data) {
+                    debugger;
+                    if (data != null) {
+                        debugger;
+                        $("#Taskname").val(data.descriptions);
+                    }
+                });
+            }
+        });
+        if ($("#Taskcode").val() != null) {
+            var url = "/CoachingMaster/Items/Gettask?Taskcode=" + $("#Taskcode").val();
+            $.get(url, function (data) {
+                debugger;
+                if (data != null) {
+                    debugger;
+                    $("#Taskname").val(data.descriptions);
+                }
+            });
+        }
+
+        $("#Plname").val(($("#Plcode").val() != "") ? $("#Plcode option:selected").text() : "");
+        $("#Plcode").change(function () {
+            debugger;
+            if ($("#Plcode").val() != null) {
+                var url = "/CoachingMaster/Types/Getpldesc?Plcode=" + $("#Plcode").val();
+                $.get(url, function (data) {
+                    debugger;
+                    if (data != null) {
+                        debugger;
+                        $("#Plname").val(data.pldiscreption);
+                        $("#Pltypes").val(data.pllevel);
+                    }
+                });
+            }
+        });
+        if ($("#Plcode").val() != null) {
+            var url = "/CoachingMaster/Types/Getpldesc?Plcode=" + $("#Plcode").val();
+            $.get(url, function (data) {
+                debugger;
+                if (data != null) {
+                    debugger;
+                    $("#Plname").val(data.pldiscreption);
+                    $("#Pltypes").val(data.pllevel);
+                }
+            });
+        }
+
+        $('#submit').click(function () {
+            debugger;
+            var form = $('#items')
+                .removeData("validator") /* added by the raw jquery.validate plugin */
+                .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                debugger;
+                var url = "/CoachingMaster/Items/Edit";
+                $('#general-error').hide();
+                $('#errors').empty();
+                $.post(url, $('#items').serialize(), function (data) {
+                    if (data.status == "3" || data.status == "4" || data.status == "5") {
+                        if (data.status == "3") {
+                            swal({
+                                type: 'success',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            }).then(() => { window.location = "/CoachingMaster/Items/Index"; });;
+                            $('#modal').modal('hide');
+                        }
+                        else {
+                            swal({
+                                type: 'error',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
+                    }
+                    else {
+                        $.each(data.errorList, function (index, value) {
+                            $('#errors').append('<li> ' + value + ' </li>');
+                        });
+                        $('#general-error').show();
+                    }
+                });
+
+            }
+        });
+    });
+
+</script>

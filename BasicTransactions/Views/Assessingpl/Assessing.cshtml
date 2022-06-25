@@ -1,0 +1,285 @@
+﻿@model IEnumerable<MROCoatching.DataObjects.Models.BasicTransactions.Coachingpairupshdr>
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;// "~/Views/Shared/_Layout3.cshtml";
+}
+<style>
+    #loader, #exportCargoRevenueAccountingloader {
+        color: #2e7c31;
+        text-shadow: 1px 1px 1px #ccc;
+    }
+
+    .modal {
+        padding-left: 10%;
+    }
+
+    .modal-lg {
+        max-width: 80%;
+    }
+
+    .modal-backdrop {
+        z-index: auto
+    }
+</style>
+<link href="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/iCheck/square/blue.css" rel="stylesheet">
+<section class="content">
+    <div class="card">
+        <div class="card-body">
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover" id="Tables1">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(m => m.EmployeeId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(m => m.Employeename)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(m => m.Position)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(m => m.Plname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(m => m.Pllevel)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ if (Model != null)
+                            {
+                                foreach (var items in Model)
+                                {
+                                    <tr>
+                                        <th>@Html.DisplayFor(m => items.EmployeeId)</th>
+                                        <th>@Html.DisplayFor(m => items.Employeename)</th>
+                                        <th>@Html.DisplayFor(m => items.Position)</th>
+                                        <th>@Html.DisplayFor(m => items.Plname)</th>
+                                        <th>@Html.DisplayFor(m => items.Pllevel)</th>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-header">
+            <div class="card-tools col-sm-12 row">
+                <div class="col-sm-3">
+                    <label class="form-group col-sm-12">Assessment Item List</label>
+                </div>
+                <div class="col-sm-7">
+                    <div class="col-sm-12 row">
+                        <div class="form-group col-sm-12 row">
+                            @{ 
+                                var ab = @Model.FirstOrDefault().getqnsamt;
+                            }
+                            <label class="form-control-label col-sm-12"><i> <u>Maximum amount of Items to be Selected For Assessments </u> </i>  => <b style="font-size:24px;font-family:'Times New Roman';">( @ab )</b></label>
+                            <input class="form-control col-sm-12 getqnsamt" readonly style="pointer-events:none;" value="@ab" hidden/>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-tool col-sm-2" data-toggle="collapse" data-target="#collapses">
+                    <i class="left fa fa-angle-down text-success">See More</i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body table-responsive no-padding collapse in" id="collapses">
+            <table class="table table-hover" id="Tables">
+                <thead>
+                    <tr>
+                        <th hidden></th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Items.FirstOrDefault().Taskcode)
+                    </th>
+                    <th>Chapter</th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Items.FirstOrDefault().Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Items.FirstOrDefault().ATAREFCODE)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Items.FirstOrDefault().TSFNCODE)
+                    </th>
+                    <th class="text-center"> 
+                        Select
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                    @{ int a = 0;
+                        var grpdata = Model.FirstOrDefault().Items.GroupBy(c => c.Taskcode);
+                        foreach (var vals in Model.FirstOrDefault().Items)
+                        {
+                            a++;
+                                        <tr>
+                                            <td hidden>@Html.DisplayFor(model => vals.Id)</td>
+                                            <td style="width:10%;">
+                                                @Html.DisplayFor(model => vals.Taskcode)
+                                            </td>
+                                            @{ 
+                                                var ata = vals.ATAREFCODE.Substring(0, 2);
+                                                if (ata.Length < 2)
+                                                {
+                                                    ata = "0" + ata;
+                                                }
+                                                if (ata.StartsWith("0") == true)
+                                                {
+                                                    ata = vals.ATAREFCODE.Substring(1, 1);
+                                                }
+                                                <td>
+                                                    @vals._dbContext.Items.Where(c => c.Taskcode == vals.Taskcode && c.Refnumber == ata).Select(r => r.Refnumber).FirstOrDefault()
+                                                </td>
+                                            }
+                                            <td style="width:60%;">
+                                                @Html.DisplayFor(model => vals.Description)
+                                            </td>
+                                            <td style="width:10%;">
+                                                @Html.DisplayFor(model => vals.ATAREFCODE)
+                                            </td>
+                                            <td style="width:10%;">
+                                                @Html.DisplayFor(model => vals.TSFNCODE)
+                                            </td>
+                                            <td style="width:10%;">
+                                                @Html.CheckBox("CK_Checkbox" + a, (vals.Checkbox == "Y") ? true : false)
+                                            </td>
+                                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <div class="form-group col-12 text-center">
+            <button type="button" id="submit" class="btn btn-success col-sm-4"> Submit </button>
+            <span id="Coachname_Error" class="text-danger"></span>
+        </div>
+    </div>
+</section>
+<script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.js"></script>
+<script src="~/AdminLTE/plugins/sweetalert/sweetalert2.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="/Habtu/CRUD.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        })
+    });
+    var dataTable = $('#Tables').DataTable({
+        "paging": true,
+        "lengthChange": true,//drop down for number of display
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "iDisplayLength": 4
+    });
+    var dataTable =  TableControl1();
+    //var dataTable2 = TableControl();
+
+    //$('#CK_Checkbox2').on('ifChecked', function (event) {
+    //    debugger;
+    //});
+    $('#submit').click(function () {
+        debugger;
+        var a = 1;
+        var cnt = 0;
+        var cnt2 = $(".getqnsamt").val();
+        var selected = new Array();
+        $("#Tables TBODY TR").each(function () {
+            debugger;
+            var row = $(this);
+            var select = {};
+            var checkbox = ($("#CK_Checkbox" + a).is(":checked")) ? "true" : "false";
+            a++;
+            if (checkbox == "true") {
+                select.Id = (row.find("TD").eq(0).html()).trim();
+                select.Taskcode = (row.find("TD").eq(1).html()).trim();
+                select.Description = (row.find("TD").eq(3).html()).trim();
+                select.ATAREFCODE = (row.find("TD").eq(4).html()).trim();
+                select.TSFNCODE = (row.find("TD").eq(5).html()).trim();
+                cnt = cnt + 1;
+                selected.push(select);
+            }
+        });
+        if (selected.length == 0) {
+            debugger;
+            $("#Coachname_Error").html('<p>' + '<b>' + '<i>' + "Please Select at Least one Item for Assessment! " + '</i>' + '</b>' + '</p>');
+            return false;
+        }
+        else if (cnt > cnt2) {
+            debugger;
+            $("#Coachname_Error").html('<p>' + '<b>' + '<i>' + "Number of Selected Items are Greater than Number of Required Items for This PL Assessments!" + '</i>' + '</b>' + '</p>');
+            return false;
+        }
+        else if (selected.length > 0) {
+            $("#Coachname_Error").html('<p>' + " " + '</p>');
+            var testObj = {
+                Coachings: selected
+            };
+            var url = "/BasicTransactions/Assessingpl/Views";
+            $('#general-error').hide();
+            $('#errors').empty();
+            //$('#modals').modal('show');
+            //$('#modal_Titles').html("Assessing");
+
+            //window.open(
+            //    'Views?testObj=' + testObj,
+            //    '_blank'
+            //);
+            $.post(url, testObj, function (data) {
+                debugger;
+                window.open(
+                    'Views',
+                    '_blank'
+                )
+                //$('#innerModalbodys').empty();
+                //$('#innerModalbodys').html(data);
+                //$('#loaders').hide();
+                //$('#modals').modal('show');
+            });
+        }
+    });
+    $('#Addrecords').click(function () {//.closest("TABLE")
+        debugger;
+        var Id = $(this).attr('data-id');
+        var Taskcode = $(this).attr('data-Taskcode');
+        var Description = $(this).attr('data-Description');
+        var vals = "A";
+        
+        $("#Tables TBODY TR").each(function () {
+            debugger;
+            var row = $(this);
+            var id = (row.find("TD").eq(0).html()).trim();
+            if (id == Id) {
+                var tBody = $("#Tables2 > TBODY")[0];
+                //Add Row.
+                var row = tBody.insertRow(-1);
+
+                //ID cell.
+                var cell = $(row.insertCell(-1));
+                cell.html(Id);
+
+                //Taskcode cell.
+                cell = $(row.insertCell(-1));
+                cell.html(Taskcode);
+
+                //Description cell.
+                cell = $(row.insertCell(-1));
+                cell.html(Description);
+
+            }
+    });
+    });
+
+
+</script>

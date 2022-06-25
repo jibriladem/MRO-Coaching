@@ -1,0 +1,203 @@
+﻿@model MROCoatching.DataObjects.Models.General.Departments
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MROCoatching.DataObjects.DropDown;
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+
+    fieldset {
+        border: 1px solid #005580;
+        padding: 3px;
+    }
+
+    legend {
+        font-family: 'Wide Latin';
+        font-size: small;
+    }
+</style>
+<link rel="stylesheet" href="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+<link href="~/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-body">
+
+            <form id="departments" class="form-horizontal">
+
+                @Html.AntiForgeryToken()
+                <div class="callout callout-danger error-box-holder" id="general-error" style="display:none">
+                    <h4> Please correct the following errors and sumbit again </h4>
+                    <ul id="errors" class="error-box"></ul>
+                </div>
+                @Html.ValidationSummary(true)
+                @if (ViewBag.Message != null)
+                {
+                    <p style="color: red">@ViewBag.Message</p>
+                }
+                <fieldset class="col-sm-12">
+                    <input asp-for="Id" hidden/>
+                    <div class="row col-sm-12">
+                        <div class="col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Deptcode" class="form-control-label col-sm-4"></label>
+                                        <input asp-for="Deptcode" class="form-control col-sm-4" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Deptcode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row ">
+                                        <label asp-for="Deptname" class="form-group col-sm-4"></label>
+                                        <input asp-for="Deptname" class="form-control col-sm-8" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Deptname" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Costcentercode" class="form-control-label col-sm-4"></label>
+                                        <input asp-for="Costcentercode" class="form-control col-sm-8" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Costcentercode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row ">
+                                        <label asp-for="Costcentername" class="form-group col-sm-4"></label>
+                                        <input asp-for="Costcentername" class="form-control col-sm-8" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Costcentername" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row ">
+                                        <label asp-for="Divisions" class="form-group col-sm-4"></label>
+                                        <input asp-for="Divisions" class="form-control col-sm-8" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Divisions" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Fromdate" class="form-control-label col-sm-4"></label>
+                                        <input asp-for="Fromdate" class="form-control col-sm-4" type="date" readonly style="pointer-events:none;" />
+                                        <input asp-for="Toodate" class="form-control col-sm-4" type="date" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Fromdate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Reportsto" class="form-control-label col-sm-4"></label>
+                                        <input asp-for="Reportsto" class="form-control col-sm-8" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Reportsto" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+            </form>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+<script src="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script>
+
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        })
+    });
+    //$("#Costcentername").val(($("#Costcentercode").val() != "") ? $("#Costcentercode option:selected").text() : "");
+    //$("#Costcentercode").change(function () {
+    //    debugger;
+    //    if ($("#Costcentercode").val() != null) {
+    //        var url = "/General/Costcenters/Getcostcenter?Costcentercode=" + $("#Costcentercode").val();
+    //        $.get(url, function (data) {
+    //            $("#Costcentername").val(data.costcentername);
+    //        });
+    //    }
+    //    else if ($("#Costcentercode").val() == null) {
+    //        $("#Costcentername").val("");
+    //    }
+    //});
+
+    $(document).ready(function () {
+        let dateObj = new Date();
+        $('.date-field').datepicker(
+            {
+                format: 'mm/dd/yyyy',
+                startDate: dateObj,
+                autoclose: true
+            }).datepicker("setDate", dateObj);
+        $('.select2').select2();
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                $('#submit').click();//Trigger search button click event
+            }
+        });
+
+        $('#submit').click(function () {
+            debugger;
+            var form = $('#departments')
+                .removeData("validator") /* added by the raw jquery.validate plugin */
+                .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                debugger;
+                var url = "/General/Departments/Edit";
+                $('#general-error').hide();
+                $('#errors').empty();
+                $.post(url, $('#departments').serialize(), function (data) {
+                    if (data.status == "3" || data.status == "4" || data.status == "5") {
+                        if (data.status == "3") {
+                            swal({
+                                type: 'success',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            }).then(() => { window.location = "/General/Departments/Index"; });;
+                            $('#modal').modal('hide');
+                        }
+                        else {
+                            swal({
+                                type: 'error',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
+                    }
+                    else {
+                        $.each(data.errorList, function (index, value) {
+                            $('#errors').append('<li> ' + value + ' </li>');
+                        });
+                        $('#general-error').show();
+                    }
+                });
+            }
+        });
+    });
+
+</script>

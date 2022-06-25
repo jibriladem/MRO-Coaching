@@ -1,0 +1,142 @@
+﻿@model IEnumerable<MROCoatching.DataObjects.Models.AssessingTable.Assessmentresult>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MROCoatching.DataObjects.DropDown;
+@{
+    ViewData["Title"] = "Finalassessment";
+    Layout = null;
+}
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+
+    fieldset {
+        border: 1px solid #005580;
+        padding: 3px;
+    }
+
+    legend {
+        font-family: 'Wide Latin';
+        font-size: small;
+    }
+</style>
+<link rel="stylesheet" href="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+<link href="~/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-body">
+
+            <form id="types" class="form-horizontal">
+
+                @Html.AntiForgeryToken()
+                <div class="callout callout-danger error-box-holder" id="general-error" style="display:none">
+                    <h4> Please correct the following errors and sumbit again </h4>
+                    <ul id="errors" class="error-box"></ul>
+                </div>
+                @Html.ValidationSummary(true)
+                @if (ViewBag.Message != null)
+                {
+                    <p style="color: red">@ViewBag.Message</p>
+                }
+                <fieldset class="col-sm-12">
+                    <div class="row col-sm-12">
+                       <table id="TableControl" class="table table-hover">
+                           <thead>
+                               <tr>
+                                   <th>
+                                       @Html.DisplayNameFor(model => model.Plcode)
+                                   </th>
+                                   <th>
+                                       @Html.DisplayNameFor(model => model.EmployeeId)
+                                   </th>
+                                   <th>
+                                       @Html.DisplayNameFor(model => model.Asscatgcode)
+                                   </th>
+                                   <th>
+                                       @Html.DisplayNameFor(model => model.Assquestions)
+                                   </th>
+                                   <th>
+                                       @Html.DisplayNameFor(model => model.Status)
+                                   </th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        foreach(var item in Model)
+                                        {
+                                            <tr>
+                                            <td>
+                                            @Html.DisplayFor(model => item.Plcode)
+                                            </td>
+                                             <td>
+                                            @Html.DisplayFor(model => item.EmployeeId)
+                                            </td>
+                                             <td>
+                                            @Html.DisplayFor(model => item.Asscatgcode)
+                                            </td>
+                                             <td>
+                                            @Html.DisplayFor(model => item.Assquestions)
+                                            </td>
+                                             <td>
+                                            @Html.DisplayFor(model => item.Status)
+                                            </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                           </tbody>
+                       </table>
+                    </div>
+                </fieldset>
+                <br />
+                <div class="row cols-m-12">
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="FirstOrDefault().ERNAM" class="form-control-label col-sm-4"></label>
+                                <input asp-for="FirstOrDefault().ERNAM" class="form-control col-sm-8" type="text" value="@User.Identity.Name" readonly />
+                                <span asp-validation-for="FirstOrDefault().ERNAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="FirstOrDefault().ERDAT" class="form-control-label col-sm-4"></label>
+                                <input asp-for="FirstOrDefault().ERDAT" class="form-control col-sm-8" type="text" value="@DateTime.UtcNow" readonly />
+                                <span asp-validation-for="FirstOrDefault().ERNAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br /> 
+                <div class="form-group col-12 text-center">
+                    <button type="button" id="submit" class="btn btn-success col-sm-4"> Create </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+<script src="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+

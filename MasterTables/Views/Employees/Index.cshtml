@@ -1,0 +1,317 @@
+﻿@model IEnumerable<MROCoatching.DataObjects.Models.MasterTables.Employees>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_mainLayout.cshtml";
+}
+
+<style>
+    #loader, #exportCargoRevenueAccountingloader {
+        color: #2e7c31;
+        text-shadow: 1px 1px 1px #ccc;
+    }
+
+    .modal {
+        padding-left: 10%;
+    }
+
+    .modal-lg {
+        max-width: 80%;
+    }
+
+    .modal-backdrop {
+        z-index: auto
+    }
+</style>
+<link href="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/iCheck/square/blue.css" rel="stylesheet">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-10">
+                <h1>Employee Master Table</h1>
+            </div>
+
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+
+            <h3 class="card-title">
+                <a class="box-title" href="#" id="create_new"> <i class="fa fa-plus text-primary"></i>  Create New </a> &nbsp;&nbsp;&nbsp;
+                <a class="box-title" href="#" id="uploads"> <i class="fa fa-upload"></i>  Upload File </a> &nbsp;&nbsp;&nbsp;
+            </h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="box-body table-responsive no-padding">
+                <table id="TableControl" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.EmployeeId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Employeename)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Costcentercode)
+                            </th>
+                            @*<th>
+                                @Html.DisplayNameFor(model => model.Costcentername)
+                            </th>*@
+                            <th>
+                                @Html.DisplayNameFor(model => model.Reportsto)
+                            </th>
+                            @*<th>
+                                @Html.DisplayNameFor(model => model.Seniordate)
+                            </th>*@
+                            <th>
+                                @Html.DisplayNameFor(model => model.PositionId)
+                            </th>
+                            @*<th>
+                                @Html.DisplayNameFor(model => model.Positiondesc)
+                            </th>*@
+                            @*<th>
+                                @Html.DisplayNameFor(model => model.Fromdate)
+                            </th>*@
+                            @*<th>
+                                @Html.DisplayNameFor(model => model.Toodate)
+                            </th>*@
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+
+                            @*<th>
+            @Html.DisplayNameFor(model => model.ERDAT)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ERNAM)
+        </th>*@
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+                            if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+
+
+                                                <tr>
+                                                    <td>@(i++)</td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.EmployeeId)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Employeename)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Costcentercode)
+                                                    </td>
+                                                    @*<td>
+                                                        @Html.DisplayFor(modelItem => item.Costcentername)
+                                                    </td>*@
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Reportsto)
+                                                    </td>
+                                                    @*<td>
+                                                        @Html.DisplayFor(modelItem => item.Seniordate)
+                                                    </td>*@
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.PositionId)
+                                                    </td>
+                                                    @*<td>
+                                                        @Html.DisplayFor(modelItem => item.Positiondesc)
+                                                    </td>*@
+                                                    @*<td>
+                                                        @Html.DisplayFor(modelItem => item.Fromdate)
+                                                    </td>*@
+                                                    @*<td>
+                                                        @Html.DisplayFor(modelItem => item.Toodate)
+                                                    </td>*@
+                                                    <td>
+                                                        @{
+                                                            if (item.Status == "Y")
+                                                            {
+                                                                <input type="text" class="form-control col-sm-6 text-white text-center" readonly value="Active" style="background: #008000;" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="text" class="form-control col-sm-8 text-white  text-center" readonly value="Not-Active" style="background: #d33;" />
+                                                            }
+                                                        }
+                                                    </td>
+
+                                                    @*<td>
+            @Html.DisplayFor(modelItem => item.ERDAT)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ERNAM)
+        </td>*@
+                                                    <td>
+                                                        <span style="white-space : nowrap">
+                                                            <a title="Edit" class="box-title edit" href="#" data-id="@item.Id"><i class="fa fa-edit text-success"></i></a>&nbsp;
+                                                            <a title="Detail" class="box-title details" href="#" data-id="@item.Id"><i class="fa fa-eye text-success"></i></a>&nbsp;
+                                                            <a title="Delete" class="delete" href="#" data-id="@item.Id">   <i class="fa fa-trash text-danger"></i></a>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="modal" class="modal fade" style="display:none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal_Title">    </h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <hr />
+            <div class="modal-body" id="modal_body">
+                <div class="overlay" id="loader">
+                    <i class="fa fa-refresh fa-spin fa-3x offset-sm-5"></i>
+
+                    <br /><br /><br />
+                </div>
+                <div id="innerModalbody">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.js"></script>
+<script src="~/AdminLTE/plugins/sweetalert/sweetalert2.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="/Habtu/CRUD.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('input').iCheck({ //For CheckBox
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '30%' // optional
+        });
+
+        var mainTitle = "Employee Master";
+        var mainUrl = "/MasterTables/Employees/";
+        var dataTable = TableControl();
+
+        $('#create_new').click(function () {
+            debugger;
+            var url = mainUrl + "Create";
+            var title = "Create - " + mainTitle;
+            Create(url, title);
+        });
+        $('#uploads').click(function () {
+            debugger;
+            var url = mainUrl + "Upload";
+            var title = "Upload - " + mainTitle;
+            Upload(url, title);
+        });
+        dataTable.on("click", ".edit", function () {
+            var url = mainUrl + "Edit?id=" + $(this).attr('data-id');
+            var title = "Edit - " + mainTitle;
+            Edit(url, title);
+        });
+        dataTable.on("click", ".details", function () {
+            var url = mainUrl + "Details?id=" + $(this).attr('data-id')
+            var title = "Detail of " + mainTitle;
+            Details(url, title);
+        });
+        dataTable.on("click", ".delete", function () {
+            //var url = mainUrl + "Delete?id=" + $(this).attr('data-id')
+            //var title = 'Are you sure you want to delete this ?';
+            //DeleteRecord($(this), url, title);
+            var url = mainUrl + "Delete?id=" + $(this).attr('data-id');
+            var title = 'Are you sure you want to delete this ?';
+            Delete1(url, title);
+        });
+        dataTable.on('click', 'tr', function () {
+            debugger;
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                dataTable.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+        function Delete1(url, title) {
+            debugger;
+            var rowClicked = "#" + $(this).parents('tr').attr('id');
+            swal({
+                type: 'error',
+                title: title,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                debugger;
+                if (result.value) {
+                    //var url = url;
+                    $.get(url, function (result) {
+                        debugger;
+                        //alert(JSON.stringify(result))
+                        if (result.status == "3" || result.status == "4" || result.status == "5") {
+                            if (result.status == "3") {
+                                swal({
+                                    type: 'success',
+                                    title: result.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                }).then(() => { window.location = "/MasterTables/Employees/Index"; });;
+                                $('#modal').modal('hide');
+                            }
+                            else {
+                                swal({
+                                    type: 'error',
+                                    title: result.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
+                        }
+
+                        else {
+                            debugger;
+                            swal({
+                                type: 'error',
+                                title: result.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+</script>

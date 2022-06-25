@@ -1,0 +1,148 @@
+﻿@model MROCoatching.DataObjects.Models.General.Positions
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MROCoatching.DataObjects.DropDown;
+@{
+    ViewData["Title"] = "Upload";
+    Layout = null;
+}
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+
+    fieldset {
+        border: 2px solid #005580;
+        padding: 3px;
+    }
+
+    legend {
+        font-family: 'Wide Latin';
+        font-size: small;
+    }
+    .modal {
+        padding-left: 40%;
+    }
+
+    .modal-lg {
+        max-width: 80%;
+    }
+
+    .modal-backdrop {
+        z-index: auto
+    }
+</style>
+<link rel="stylesheet" href="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+<link href="~/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<section class="content">
+    <div class="card">
+        <div class="card-body">
+            <form id="form" class="form-horizontal">
+                <fieldset>
+                    <div class="form-group-sm col-sm-12">
+                        <p> <b><i> Before Uplaoding data please check whether data is correct or not! </i></b></p>
+                        <p> <b><i> Please Download this <a href="~/UploadFiles/Positions.csv">sample file</a> and compare with it! </i></b></p>
+                    </div>
+                </fieldset>
+                <div class="form-group col-sm-12 row">
+                    <label asp-for="Files" class="control-label col-sm-4">Upload Attachements</label>
+                    <div class="col-sm-8">
+                        <input asp-for="Files" class="form-control" />
+                        <span asp-validation-for="Files" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group col-12 text-center">
+                    <button type="button" id="submit" class="btn btn-success col-sm-4"> Save </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script src="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        let dateObj = new Date();
+        $('.date-field').datepicker(
+            {
+                format: 'mm/dd/yyyy',
+                startDate: dateObj,
+                autoclose: true
+            }).datepicker("setDate", dateObj);
+        $('.select2').select2();
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                $('#submit').click();//Trigger search button click event
+            }
+        });
+    });
+    $('#submit').click(function () {
+        debugger;
+        $(this).attr("disabled", true).text("Uploading...");
+
+
+
+        var url = "/General/Positions/Upload";
+        var form = $('#form').removeData("validator") /* added by the raw jquery.validate plugin */
+            .removeData("unobtrusiveValidation"); /* added by the jquery unobtrusive plugin*/;
+        var formData = new FormData(form[0]);
+        $.ajax({
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            url: url,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if (data.status == 3) {
+                    swal({
+                        type: 'success',
+                        title: data.message,
+                        showConfirmButton: false,
+                        timer: 3000
+                    }).then(() => { window.location = "/General/Positions/Index"; });;
+                    $('#modal').modal('hide');
+                }
+                else if (data.status == 4 || data.status == 5 || data.status == 1) {
+                    swal({
+                        type: 'error',
+                        title: data.message,
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+
+
+
+                    $('#submit').removeAttr("disabled").text(" Send ");
+                    if (data.message != null) {
+                        $('#errors').html('<li class="text-danger"> ' + data.message + ' </li>');
+                        $('#general-error').show();
+                    }
+                }
+                else {
+                    $('#submit').removeAttr("disabled").text(" Send ");
+                    $.each(data.errorList, function (index, value) {
+                        $('#errors').html('<li class="text-danger"> ' + value + ' </li>');
+                    });
+                    $('#general-error').show();
+                }
+            },
+            error: function (data) {
+                $("#submit").html('Saving...');
+            }
+        });
+    });
+</script>

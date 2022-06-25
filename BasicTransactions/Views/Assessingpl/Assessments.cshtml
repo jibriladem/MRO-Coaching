@@ -1,0 +1,228 @@
+﻿@model MROCoatching.DataObjects.Models.BasicTransactions.Coaching
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MROCoatching.DataObjects.DropDown;
+@{
+    ViewData["Title"] = "Assessments";
+    Layout = null;// "~/Views/Shared/_Layout3.cshtml";
+}
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+
+    fieldset {
+        border: 1px solid #005580;
+        padding: 3px;
+    }
+
+    legend {
+        font-family: 'Wide Latin';
+        font-size: small;
+    }
+</style>
+<link rel="stylesheet" href="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+<link href="~/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<section class="content col-sm-12">
+    <div class="card">
+        <div class="card-body">
+            <form id="Assessing" class="form-horizontal">
+                <div class="form-group col-sm-12">
+                    <div class="form-group col-sm-12 row">
+                        <div class="form-group col-sm-6">
+                            <label class="form-control-label" asp-for="ATAREFCODE"></label>
+                            <input asp-for="ATAREFCODE" class="form-control col-sm-12" readonly style="pointer-events:none;" />
+                            <span asp-validation-for="ATAREFCODE" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label class="form-control-label" asp-for="TSFNCODE"></label>
+                            <input asp-for="TSFNCODE" class="form-control col-sm-12" readonly style="pointer-events:none;" />
+                            <span asp-validation-for="TSFNCODE" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 row">
+                        <div class="form-group col-sm-6">
+                            <label class="form-control-label" asp-for="Plcode"></label>
+                            <input asp-for="Plcode" class="form-control col-sm-12" readonly style="pointer-events:none;" />
+                            <span asp-validation-for="Plcode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label class="form-control-label" asp-for="Pllevel"></label>
+                            <input asp-for="Pllevel" class="form-control col-sm-12" readonly style="pointer-events:none;" />
+                            <span asp-validation-for="Pllevel" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12 row">
+                        <label class="form-control-label col-sm-4" asp-for="Taskcode"></label>
+                        <input asp-for="Taskcode" class="form-control col-sm-2" readonly style="pointer-events:none;" />
+                        <input asp-for="Taskname" class="form-control col-sm-6" readonly style="pointer-events:none;" />
+                        <span asp-validation-for="Taskcode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12 row">
+                        <label class="form-control-label col-sm-4" asp-for="Taskdesc"></label>
+                        <textarea asp-for="Taskdesc" class="form-control col-sm-8" readonly style="pointer-events:none;"></textarea>
+                        <span asp-validation-for="Taskdesc" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12 row" hidden>
+                        <label class="form-control-label col-sm-4" asp-for="Traineeapproval"></label>
+                        <input asp-for="Traineeapproval" class="form-control col-sm-8" readonly style="pointer-events:none;" />
+                        <span asp-validation-for="Traineeapproval" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12 row" hidden>
+                        <label class="form-control-label col-sm-4" asp-for="Coachapproval"></label>
+                        <input asp-for="Coachapproval" class="form-control col-sm-8" readonly style="pointer-events:none;" />
+                        <span asp-validation-for="Coachapproval" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12 row" hidden>
+                        <label class="form-control-label col-sm-4" asp-for="Taskcount"></label>
+                        <input asp-for="Taskcount" class="form-control col-sm-8" readonly style="pointer-events:none;" />
+                        <span asp-validation-for="Taskcount" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12 row">
+                        <label class="form-control-label col-sm-4" asp-for="Dateapproved"></label>
+                        <input asp-for="Dateapproved" class="form-control col-sm-8" readonly style="pointer-events:none;" />
+                        <span asp-validation-for="Dateapproved" class="text-danger"></span>
+                    </div>
+                    @{
+                        if (Model.Reasons != null)
+                        {
+                            <div class="form-group col-sm-12 row">
+                                <label class="form-control-label col-sm-4" asp-for="Reasons"></label>
+                                <textarea asp-for="Reasons" class="form-control col-sm-8" readonly style="pointer-events:none;"></textarea>
+                                <span asp-validation-for="Reasons" class="text-danger"></span>
+                            </div>
+                        }
+                    }
+                </div>
+                <br />
+                <div class="form-group col-12 text-center">
+                    <button id="dLabel-@Model.ID" type="button" class="btn btn-success dropdown-toggle action-ddl-issue col-sm-4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Assessor Action
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu btn btn-light text-center" aria-labelledby="dLabel-@Model.ID">
+                        <li class=" col-sm-12 text-left"> <a class="dropdown-item btn btn-success takeaction" href="#" data-id="@Model.ID" data-EmployeeId1="@Model.EmployeeId" data-Traineeapproval="@Model.Traineeapproval" data-Taskcode="@Model.Taskcode"><i class="fa fa-ship">Approve</i></a></li>
+                        <li class=" col-sm-12 text-left"> <a class="dropdown-item btn btn-warning approvewithrem " href="#" data-id="@Model.ID" data-EmployeeId1="@Model.EmployeeId" data-Traineeapproval="@Model.Traineeapproval" data-Taskcode="@Model.Taskcode"><i class="fa fa-ship">Approve with Remark</i></a></li>
+                        <li class="col-sm-12 text-left"> <a class="dropdown-item btn btn-danger rejaction " href="#" data-id="@Model.ID" data-EmployeeId1="@Model.EmployeeId" data-Traineeapproval="@Model.Traineeapproval" data-Taskcode="@Model.Taskcode"><i class="fa fa-ship">Reject</i></a></li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script src="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript">
+    //var dataTable = TableControl();
+    $(".takeaction").click(function () {
+        debugger;
+        $('#general-error').hide();
+        $('#errors').empty();
+        var rowClicked = "#" + $(this).parents('tr').attr('id');
+
+        swal({
+            title: "Are you sure?",
+            text: "Really You want to Take Action?",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonColor: "#DD6B55",
+            confirmButtonColor: "#179409",
+            confirmButtonText: "Yes, Take Action!",
+            cancelButtonText: "No, cancel Request!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }).then((data) => {
+            debugger;
+            if (data.value) {
+                var form = $('#Assessing')
+                    .removeData("validator") /* added by the raw jquery.validate plugin */
+                    .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+                var status = "ACC";
+                var url = "/BasicTransactions/Assessingpl/Assessments?status=" + status;
+                $('#general-error').hide();
+                $('#errors').empty();
+                $.post(url, $("#Assessing").serialize(), function (data) {
+                    if (data.status == 3 || data.status == 4 || data.status == 5 || data.status == 6) {
+                        if (data.status == 6) {
+                            swal({
+                                type: 'success',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });//.then(() => { window.location = "/General/Costcenters/Index"; });;
+                            //$('#modal').modal('hide');
+                        }
+                        else {
+                            swal({
+                                type: 'error',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
+                    }
+                    else {
+                        $.each(data.errorList, function (index, value) {
+                            $('#errors').append('<li> ' + value + ' </li>');
+                        });
+                        $('#general-error').show();
+                    }
+                });
+            }
+        });
+    });
+    $(".approvewithrem").click(function () {
+        debugger;
+        var status = "ACR";
+        var coaches = $("#Coachapproval").val();
+        var url = "/BasicTransactions/Assessingpl/Reasonsfor?Employeeid=" + $(this).attr('data-EmployeeId1') + '&ID=' + $(this).attr('data-id') + '&Coaches=' + coaches
+        //var url = "/BasicTransactions/Assessingpl/Reasonsfor?status=" + status;
+        $('#modalreasons').modal('show');
+        $('#modalreasons_Title').html("Reasons");
+        $.get(url, function (data) {
+            debugger;
+            if (data != null) {
+                debugger;
+                $(this).attr("disabled", true).text("Approving...");
+                $('#innerModalbodyreasons').empty();
+                $('#innerModalbodyreasons').html(data);
+                $('#loaderreasons').hide();
+                $('#modalreasons').modal('show');
+            }
+        });
+    });
+    $(".rejaction").click(function () {
+        debugger;
+        $('#general-error').hide();
+        $('#errors').empty();
+        var rowClicked = "#" + $(this).parents('tr').attr('id');
+
+        swal({
+            title: "Are you sure?",
+            text: "Really You want to Take Action?",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonColor: "#DD6B55",
+            confirmButtonColor: "#179409",
+            confirmButtonText: "Yes, Take Action!",
+            cancelButtonText: "No, cancel Request!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }).then((data) => {
+
+        });
+    });
+</script>

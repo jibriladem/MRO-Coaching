@@ -1,0 +1,89 @@
+﻿@model IEnumerable<MROCoatching.DataObjects.Models.CoachingTable.ATAChapters>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MROCoatching.DataObjects.DropDown;
+@{
+    Layout = null;
+}
+<style>
+    #loader, #exportCargoRevenueAccountingloader {
+        color: #2e7c31;
+        text-shadow: 1px 1px 1px #ccc;
+    }
+
+    .modal {
+        padding-left: 10%;
+    }
+
+    /* .modalsmall {
+        padding-left: 10%;
+    }*/
+
+    .modal-lg {
+        max-width: 80%;
+    }
+
+    .modal-sm {
+        max-width: 40%;
+        z-index: 10;
+    }
+
+    .modalsmall-lg {
+        max-width: 80%;
+        width: 80px;
+    }
+
+    .modal-backdrop {
+        z-index: auto
+    }
+</style>
+<link rel="stylesheet" href="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/datepicker/datepicker3.css" />
+@*<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12 row">
+                <h1> ATA Chapter Details</h1>
+            </div>
+        </div>
+    </div>
+</section>*@
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-body">
+            <div class="box-body table-responsive no-padding">
+                <table id="TableControl" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ATA_Chapter)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Chapter_Title)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ATA_Chapter)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Chapter_Title)
+                                        </td>
+                                    </tr>            
+                                    }
+                                }
+                             }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

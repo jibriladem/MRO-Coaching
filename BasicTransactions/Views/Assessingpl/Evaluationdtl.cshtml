@@ -1,0 +1,443 @@
+﻿@model IEnumerable<MROCoatching.DataObjects.Models.BasicTransactions.Coaching>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout =  null;//"~/Views/Shared/_Layout3.cshtml"; //
+}
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+
+    #loader, #exportCargoRevenueAccountingloader {
+        color: #2e7c31;
+        text-shadow: 1px 1px 1px #ccc;
+    }
+    .modal {
+        padding-left: 10%;
+    }
+    .modalsmall {
+        padding-left: 10%;
+    }
+    /* .modalsmall {
+        padding-left: 10%;
+    }*/
+
+    .modal-lg {
+        max-width: 80%;
+    }
+
+    .modal-sm {
+        max-width: 40%;
+        z-index: 10;
+    }
+
+    .modalsmall-lg {
+        max-width: 80%;
+        width: 80px;
+    }
+
+    .modal-backdrop {
+        z-index: auto
+    }
+</style>
+<link href="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/iCheck/square/blue.css" rel="stylesheet">
+<section class="content">
+    <div class="card-header">
+        <div class="card-tools col-sm-12 row">
+            <div class="col-sm-6 row">
+                <a class="box-title col-sm-12" href="#" id="getdashbord" data-EmployeeId="@Model.FirstOrDefault().EmployeeId"> <i class="left fa fa-info-circle text-success"></i> Show Status in Graphs </a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-tools col-sm-12 row">
+                <div class="col-sm-6">
+                    @*<label class="form-group col-sm-12">Evaluations</label>*@
+                </div>
+                <button type="button" class="btn btn-tool col-sm-6" data-toggle="collapse" data-target="#collapse">
+                    <i class="left fa fa-angle-down text-success">See More</i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="box-body table-responsive no-padding collapse in" id="collapse">
+        @{
+            if (Model != null)
+            {
+                    <table class="table table-hover" id="TableControls">
+                        <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th class="text-center">
+                                            @Html.DisplayNameFor(m => m.Taskcode)
+                                        </th>
+                                        <th class="text-center">
+                                            @Html.DisplayNameFor(m => m.Taskdesc)
+                                        </th>
+                                        <th class="text-center">Details</th>
+                                        <th class="text-center">Take Action</th>
+                                    </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                if (Model != null)
+                                {
+                                    int i = 1;
+                                    foreach (var val in Model)
+                                    {
+                                         <tr>
+                                                            <td style="width:1%;">@(i++)</td>
+                                                            <td style="width:7%;">
+                                                                @Html.DisplayFor(m => val.Taskcode)
+                                                            </td>
+                                                            <td style="width:62%;">
+                                                                @Html.DisplayFor(m => val.Taskdesc)
+                                                            </td>
+                                                            <td style="width:15%;">
+                                                                @{  
+                                                                    if (val.Actionfrm <= DateTime.Now && val.Actiontoo >= DateTime.Now)
+                                                                    {
+                                                                        if (val.Status == "T")
+                                                                        {
+                                                                            <button title="Details" class="btn btn-info Coachingdtl col-sm-12" href="#" data-id="@val.ID" data-EmployeeId="@val.EmployeeId" data-status="@val.Status">Details</button>
+                                                                        }
+                                                                        else if (val.Status == "C")
+                                                                        {
+                                                                            <button title="Details" class="btn btn-info Coachingdtl col-sm-12" href="#" data-id="@val.ID" data-EmployeeId="@val.EmployeeId" data-status="@val.Status">Details</button>
+                                                                        }
+                                                                        else if (val.Status == "N")
+                                                                        {
+                                                                            <button title="Details" class="btn btn-warning Waitingdtl col-sm-12" href="#" data-id="@val.ID" data-EmployeeId="@val.EmployeeId" data-status="@val.Status" style="cursor:not-allowed;">Waiting for Trainee</button>                                                    
+                                                                        }
+                                                }
+                                                else if (val.Actionfrm >= DateTime.Now && val.Actiontoo >= DateTime.Now)
+                                                {
+                                                    if (val.Status == "N")
+                                                    {
+                                                        <button title="Action Taken" class="btn btn-warning col-sm-12" href="#" style="cursor:not-allowed;">Waiting To Date</button>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <button title="Details" class="btn btn-info Coachingdtl col-sm-12" href="#" data-id="@val.ID" data-EmployeeId="@val.EmployeeId" data-status="@val.Status">Details</button>
+                                                    }
+                                                }
+                                                else if (val.Actionfrm < DateTime.Now && val.Actiontoo < DateTime.Now)
+                                                {
+                                                    if (val.Status == "N")
+                                                    {
+                                                        <button title="Action Taken" class="btn btn-danger col-sm-12" href="#" style="cursor:not-allowed;">Date Was Expired</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button title="Details" class="btn btn-info Coachingdtl col-sm-12" href="#" data-id="@val.ID" data-EmployeeId="@val.EmployeeId" data-status="@val.Status">Details</button>
+                                                    }
+                                                }
+                                                
+                                                        }
+                                                            </td>
+                                                            <td style="width:15%;">
+                                                                @{
+                                                                    if (val.Actionfrm <= DateTime.Now && val.Actiontoo >= DateTime.Now)
+                                                                    {
+                                                                        if (val.Status == "N")
+                                                                        {
+                                                                            <button title="Action Taken" class="btn btn-warning col-sm-12" href="#" data-id="@val.ID" data-EmployeeId="@val.EmployeeId" data-taskcode="@val.Taskcode" data-taskdesc="@val.Taskdesc" data-status="@val.Status" style="cursor:not-allowed;">Not Started</button>
+                                                                        }
+                                                                        else if (val.Status == "T")
+                                                                        {
+                                                                            <button title="Action Taken" class="btn btn-warning col-sm-12" href="#" data-id="@val.ID" data-EmployeeId="@val.EmployeeId" data-taskcode="@val.Taskcode" data-taskdesc="@val.Taskdesc" data-status="@val.Status" style="cursor:not-allowed;">Waiting for Coach</button>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                        <button title="Action Taken" class="btn btn-info col-sm-12" href="#" data-id="@val.ID" data-EmployeeId="@val.EmployeeId" data-taskcode="@val.Taskcode" data-taskdesc="@val.Taskdesc " data-status="@val.Status" style="cursor:not-allowed;">Completed</button>
+                                                    }
+                                                }
+                                                else if (val.Actionfrm >= DateTime.Now && val.Actiontoo >= DateTime.Now)
+                                                {
+                                                    if (val.Status == "N")
+                                                    {
+                                                        
+                                                        <button title="Action Taken" class="btn btn-warning col-sm-12" href="#" style="cursor:not-allowed;">To Approve</button>
+
+                                                    }
+                                                    else
+                                                    {
+
+                                                    }
+                                                }
+                                                else if (val.Actionfrm < DateTime.Now && val.Actiontoo < DateTime.Now)
+                                                {
+                                                    if (val.Status == "N")
+                                                    {
+                                                        <button title="Action Taken" class="btn btn-danger col-sm-12" href="#" style="cursor:not-allowed;">Need Re Action</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        
+                                                    }
+                                                }
+                                         }
+                                    </td>
+                                    </tr>               
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+            }
+        }
+    </div>
+</section>
+
+<div id="modal" class="modal fade" style="display:none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal_Title">    </h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <hr />
+            <div class="modal-body" id="modal_body">
+                <div class="overlay" id="loader">
+                    <i class="fa fa-refresh fa-spin fa-3x offset-sm-5"></i>
+
+                    <br /><br /><br />
+                </div>
+                <div id="innerModalbody">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalsmall" class="modal fade" style="display:none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <hr />
+            <div class="modal-body" id="modal_body">
+                <div class="overlay" id="loadersmall">
+                    <i class="fa fa-refresh fa-spin fa-3x offset-sm-5"></i>
+                    <br />
+                </div>
+                <div id="innerModalbodysmall">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.js"></script>
+<script src="~/AdminLTE/plugins/sweetalert/sweetalert2.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="/Habtu/CRUD.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var dataTable = TableControls();
+        dataTable.on("click", ".Traineeapproval1", function () {
+            debugger;
+            alert('Blurred');
+        });
+        $('.select2').select2(); 
+
+        $('#getdashbord').click(function () {
+            debugger;
+            var value = $(this).attr('data-EmployeeId')
+            window.open(
+                'Graphs?Employeeid=' + value,
+                '_blank'
+            );
+        });
+        var Status = "";
+
+        dataTable.on("click", ".takeaction", function () {
+            debugger;
+            Status = "A";
+            var coaches = $(".Coachid").val();
+            var dates = $(".Dateapproved").val();
+            var trainee = $(".Traineeapproval").val();
+            var Atarefcode = $(".Atarefcode").val();
+            var TSFNCODE = $(".TSFNCODE").val();
+            $('#general-error').hide();
+            $('#errors').empty();
+            var rowClicked = "#" + $(this).parents('tr').attr('id');
+
+            swal({
+                title: "Are you sure?",
+                text: "Really You want to Approve this Request!",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonColor: "#DD6B55",
+                confirmButtonColor: "#179409",
+                confirmButtonText: "Yes, Take Action!",
+                cancelButtonText: "No, cancel Request!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then((data) => {
+                debugger;
+                if (data.value) {
+                    var evaluates = new Array();
+                    var id = $(this).attr('data-id');
+                    $("#TableControls TBODY TR").each(function () {
+                        debugger;;
+                        var row = $(this);
+                        var evaluate = {};
+                        var id1 = (row.find("TD").eq(8).html()).trim();
+                        if (id == id1) {
+                            debugger;
+                            evaluate.Taskcode = (row.find("TD").eq(1).html()).trim();
+                            evaluate.Taskdesc = (row.find("TD").eq(2).html()).trim();
+                            evaluate.ATAREFCODE = (row.find("TD").eq(3).html()).trim();
+                            evaluate.TSFNCODE = (row.find("TD").eq(4).html()).trim();
+                            evaluate.Traineeapproval = (row.find("TD").eq(5).html()).trim();
+                            evaluate.Coachapproval = (row.find("TD").eq(6).html()).trim();
+                            evaluate.Dateapproved = (row.find("TD").eq(7).html()).trim();
+                            evaluates.push(evaluate);
+                        }
+                    });
+                    var url = "/BasicTransactions/Coachingpl/Takeaction?Employeeid=" + $(this).attr('data-EmployeeId') + '&trainee=' + trainee + '&coaches=' + coaches + '&dates=' + dates + '&Taskcode=' + $(this).attr('data-Taskcode') + '&Atachapter=' + Atarefcode + '&Tsfncode=' + TSFNCODE + '&Status=' + Status
+                    $.get(url, function (data) {
+                        debugger;
+                        if (data != null) {
+                            if (data.status == "3" || data.status == "4" || data.status == "5") {
+                                if (data.status == "3") {
+                                    swal({
+                                        type: 'success',
+                                        title: 'Successfully Approved',//data.message,
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    }).then(() => { window.location = "/BasicTransactions/Coachingpl/Index"; });;
+                                    $('#modal').modal('show');
+                                }
+                                else {
+                                    swal({
+                                        type: 'error',
+                                        title: 'Error Message',//data.message,
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        dataTable.on("click", ".rejaction", function () {
+            debugger;
+            Status = "R";
+            var coaches = $(".Coachid").val();
+            var dates = $(".Dateapproved").val();
+            var trainee = $(".Traineeapproval").val();
+            var Atarefcode = $(".Atarefcode").val();
+            var TSFNCODE = $(".TSFNCODE").val();
+            $('#general-error').hide();
+            $('#errors').empty();
+            var rowClicked = "#" + $(this).parents('tr').attr('id');
+
+            swal({
+                title: "Are you sure?",
+                text: "Really You want to Reject this Request!",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonColor: "#DD6B55",
+                confirmButtonColor: "#179409",
+                confirmButtonText: "Yes, Take Action!",
+                cancelButtonText: "No, cancel Request!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then((data) => {
+                debugger;
+                if (data.value) {
+                    var url = "/BasicTransactions/Coachingpl/Takeaction?Employeeid=" + $(this).attr('data-EmployeeId') + '&trainee=' + trainee + '&coaches=' + coaches + '&dates=' + dates + '&Taskcode=' + $(this).attr('data-Taskcode') + '&Atachapter=' + Atarefcode + '&Tsfncode=' + TSFNCODE + '&Status=' + Status
+                    $.get(url, function (data) {
+                        debugger;
+                        if (data != null) {
+                            if (data.status == "3" || data.status == "4" || data.status == "5") {
+                                if (data.status == "3") {
+                                    swal({
+                                        type: 'success',
+                                        title: 'Successfully Approved',//data.message,
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    }).then(() => { window.location = "/BasicTransactions/Coachingpl/Index"; });;
+                                    $('#modal').modal('show');
+                                }
+                                else {
+                                    swal({
+                                        type: 'error',
+                                        title: 'Error Message',//data.message,
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        dataTable.on("click", ".Traineeaction", function () {
+            debugger;
+            var Status = $(this).attr('data-status')
+            var url = "/BasicTransactions/Coachingpl/Takeactions?Employeeid=" + $(this).attr('data-EmployeeId') + '&Taskcode=' + $(this).attr('data-taskcode') + '&Status=' + Status + '&ID=' + $(this).attr('data-id') /*+ '&Taskcode=' + $(this).attr('data-taskcode')*/ + '&Taskdesc=' + $(this).attr('data-taskdesc')
+            $('#modalrouting').modal('show');
+            $('#modalrouting_Title').html("Signing");
+            $.get(url, function (data) {
+                if (data != null) {
+                    $('#innerModalbodyrouting').empty();
+                    $('#innerModalbodyrouting').html(data);
+                    $('#loaderrouting').hide();
+                    $('#modalrouting').modal('show');
+                }
+            });
+        });
+        dataTable.on("click", ".Coachaction", function () {
+            debugger;
+            var Status = $(this).attr('data-status')
+            var url = "/BasicTransactions/Coachingpl/Takeactions?Employeeid=" + $(this).attr('data-EmployeeId') + '&Taskcode=' + $(this).attr('data-taskcode') + '&Status=' + Status + '&ID=' + $(this).attr('data-id') /*+ '&Taskcode=' + $(this).attr('data-taskcode')*/ + '&Taskdesc=' + $(this).attr('data-taskdesc')
+            $('#modalrouting').modal('show');
+            $('#modalrouting_Title').html("Signing");
+            $.get(url, function (data) {
+                if (data != null) {
+                    $('#innerModalbodyrouting').empty();
+                    $('#innerModalbodyrouting').html(data);
+                    $('#loaderrouting').hide();
+                    $('#modalrouting').modal('show');
+                }
+            });
+        });
+        dataTable.on("click", ".Coachingdtl", function () {
+            debugger;
+            var Status = $(this).attr('data-status')
+            var url = "/BasicTransactions/Coachingpl/Getdetails?Employeeid=" + $(this).attr('data-EmployeeId') + '&Status=' + Status + '&ID=' + $(this).attr('data-id')
+            $('#modalrouting').modal('show');
+            $('#modalrouting_Title').html("Details");
+            $.get(url, function (data) {
+                if (data != null) {
+                    debugger;
+                    $('#innerModalbodyrouting').empty();
+                    $('#innerModalbodyrouting').html(data);
+                    $('#loaderrouting').hide();
+                    $('#modalrouting').modal('show');
+                }
+            });
+        });
+    });
+</script>

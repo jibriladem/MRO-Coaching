@@ -1,0 +1,430 @@
+﻿@model MROCoatching.DataObjects.Models.CoachingTable.Types
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MROCoatching.DataObjects.DropDown;
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+
+    fieldset {
+        border: 1px solid #005580;
+        padding: 3px;
+    }
+
+    legend {
+        font-family: 'Wide Latin';
+        font-size: small;
+    }
+</style>
+<link rel="stylesheet" href="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+<link href="~/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-body">
+
+            <form id="assasement" class="form-horizontal">
+
+                @Html.AntiForgeryToken()
+                <div class="callout callout-danger error-box-holder" id="general-error" style="display:none">
+                    <h4> Please correct the following errors and sumbit again </h4>
+                    <ul id="errors" class="error-box"></ul>
+                </div>
+                @Html.ValidationSummary(true)
+                @if (ViewBag.Message != null)
+                {
+                    <p style="color: red">@ViewBag.Message</p>
+                }
+            <fieldset class="col-sm-12">
+                <div class="row col-sm-12">
+                    <div class="col-sm-12">
+                        <div class="form-group col-sm-8 row">
+                           
+                                <label asp-for="Plcode" class="form-group col-sm-2"></label>
+                                <div class="col-sm-4">
+                                    <select id="Plcode" class="form-control col-sm-6 select2 Plcode" asp-items="@ViewBag.Plname">
+                                        <option value="">-------</option>
+                                    </select>
+                                </div>
+                                <span id="Plcode_Error" class="text-danger"></span>
+                                <input type="text" name="Plname" id="Plname" class="form-control col-sm-4 plname" style="pointer-events:none;" readonly />
+                                <span id="Plname_Error" class="text-danger"></span>
+                            
+                                                @*<div class="col-sm-8">
+                                    <div class="col-sm-12">
+                                        <input type="text" name="Plname" id="Plname" class="form-control col-sm-12 Plname" style="pointer-events:none;" readonly />
+                                        <span id="Plname_Error" class="text-danger"></span>
+                                    </div>
+                                        </div>*@
+                        </div>
+                    </div>
+                </div>
+</fieldset>
+                <fieldset class="cols-m-12">
+                   
+                    <table class="table tab-content col-sm-12" id="Tables">
+                        <thead>
+                            <tr>
+                                @*<th>
+                                    @Html.DisplayNameFor(model => model.Plcode)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Pldiscreption)
+                                </th>*@
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Taskcode.FirstOrDefault().Keyword)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Taskcode.FirstOrDefault().Descriptions)
+                                </th>
+
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                @*<td class="col-sm-2" style="width:10%;">
+                                    <select id="Plcode" class="form-control col-sm-10 select2 " asp-items="@ViewBag.Plname">
+                                        <option value="">-------</option>
+                                    </select>
+                                    
+                                    <span id="Plcode_Error" class="text-danger"></span>
+                                </td>
+                                <td class="col-sm-2" style="width:35%;">
+                                    <input type="text" name="Plname" id="Plname" class="form-control col-sm-12" style="pointer-events:none;" readonly />
+                                    <span id="Plname_Error" class="text-danger"></span>
+                                </td>*@
+                                <td class="col-sm-2" style="width:15%;">
+                                    <select id="Taskcode" class="form-control col-sm-10 select2" asp-items="@ViewBag.Taskcode">
+                                        <option value="">-------</option>
+                                    </select>
+
+                                    <span id="Taskcode_Error" class="text-danger"></span>
+                                </td>
+                                <td class="col-sm-2" style="width:35%;">
+                                    <input type="text" name="Taskname" id="Taskname" class="form-control col-sm-12" style="pointer-events:none;" readonly />
+                                    <span id="Costcenterdesc1_Error" class="text-danger"></span>
+                                </td>
+                                <td class="col-sm-2" style="width:5%;">
+                                    <button type="button" id="Addrecords" class="btn btn-link col-sm-12 fa fa-plus-circle text-green text-left"> Add</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </fieldset>
+                <br />
+                <div id="Items" class="container tab-pane fade col-sm-12">
+                    <div class="cols-m-12 text-center">
+                        <a title="Assign" class="" />
+                        <button type="button" id="items" class="btn btn-success col-sm-4">Assign Each Task</button>
+                    </div>
+                </div>
+                <br />
+                <div class="row cols-m-12">
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="ERNAM" class="form-control-label col-sm-4"></label>
+                                <input asp-for="ERNAM" class="form-control col-sm-8" type="text" value="@User.Identity.Name" readonly />
+                                <span asp-validation-for="ERNAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="ERDAT" class="form-control-label col-sm-4"></label>
+                                <input asp-for="ERDAT" class="form-control col-sm-8" type="text" value="@DateTime.UtcNow" readonly />
+                                <span asp-validation-for="ERNAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group col-12 text-center">
+                    <button type="button" id="submit" class="btn btn-success col-sm-4"> Create </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+<script src="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script>
+
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        })
+    });
+    $("#Taskname").val(($("#Taskcode").val() != "") ? $("#Taskcode option:selected").text() : "");
+    $("#Taskcode").change(function () {
+        debugger;
+        if ($("#Taskcode").val() != null) {
+            var url = "/CoachingMaster/Items/Gettask?Taskcode=" + $("#Taskcode").val();
+            $.get(url, function (data) {
+                debugger;
+                if (data != null) {
+                    debugger;
+                    $("#Taskname").val(data.descriptions);
+                }
+            });
+        }
+    });
+    //get task discreption
+    $("#Taskname").val(($("#Taskcode").val() != "") ? $("#Taskcode option:selected").text() : "");
+    $("#Taskcode").change(function () {
+        debugger;
+        if ($("#Taskcode").val() != null) {
+            var url = "/CoachingMaster/Items/Gettask?Taskcode=" + $("#Taskcode").val();
+            $.get(url, function (data) {
+                debugger;
+                if (data != null) {
+                    debugger;
+                    $("#Taskname").val(data.descriptions);
+                }
+            });
+        }
+    });
+    //get pltype discreption
+    $("#Plcode").val(($("#Plcode").val() != "") ? $("#Plcode option:selected").text() : "");
+    $("#Plcode").change(function () {
+        debugger;
+        if ($("#Plcode").val() != null) {
+            var url = "/CoachingMaster/Types/Getpldesc?Plcode=" + $("#Plcode").val();
+            $.get(url, function (data) {
+                debugger;
+                if (data != null) {
+                    debugger;
+                    $("#Plname").val(data.pldiscreption);
+                    //$("#Pltypes").val(data.pllevel);
+                }
+            });
+        }
+    });
+
+    $('#Addrecords').click(function () {
+        debugger;
+        addcoachrecords();
+    });
+    $('#Tables').on("click", ".Remove", function () {
+        debugger;
+        $(this).closest("tr").remove();
+    });
+    function addcoachrecords() {
+        debugger;
+        var Plcode = $("#Plcode").val();
+        var Plname = $("#Plname").val();
+        var Taskcode = $("#Taskcode").val();
+        var Taskname = $("#Taskname").val();
+        //if (Plcode == "") {
+        //    $("#Plcode_Error").html('<p>' + "PL Code is Mandatory! " + '</p>');
+        //    return false;
+        //}
+        //else if (Plname == "") {
+        //    $("#Plname_Error").html('<p>' + "PL Name is Mandatory! " + '</p>');
+        //    return false;
+        //}
+        if (Taskcode == "") {
+            $("#Taskcode_Error").html('<p>' + "Cost Center is Mandatory! " + '</p>');
+            return false;
+        }
+        else {
+            $("#Plcode_Error").html('<p>' + "" + '</p>');
+            $("#Plname_Error").html('<p>' + "" + '</p>');
+            $("#Taskcode_Error").html('<p>' + "" + '</p>');
+           
+            var tBody = $("#Tables > TBODY")[0];
+            //Add Row.
+            var row = tBody.insertRow(-1);
+
+            ////Coachid cell.
+            //var cell = $(row.insertCell(-1));
+            //cell.html(Plcode);
+
+            ////Coachname cell.
+            //cell = $(row.insertCell(-1));
+            //cell.html(Plname);
+            //Costcentercode1 cell.
+            cell = $(row.insertCell(-1));
+            cell.html(Taskcode);
+            //Costcenterdesc1 cell.
+            cell = $(row.insertCell(-1));
+            cell.html(Taskname);
+            //Add Button cell.
+            cell = $(row.insertCell(-1));
+            var btnRemove = '<a class="Remove btn btn-link col-sm-12 fa fa-trash text-danger text-right" href="#" data-id="' + Taskcode + '"><i class="text-danger"> Remove</i></a>';
+            cell.html(btnRemove);
+
+            //$('#Plcode').select2('val', '');
+            //$('#Plname').val("");
+            $('#Taskcode').select2('val', '');
+            $('#Taskname').val("");
+        }
+    }
+    $(document).ready(function () {
+        let dateObj = new Date();
+        $('.date-field').datepicker(
+            {
+                format: 'mm/dd/yyyy',
+                //startDate: dateObj,
+                autoclose: true
+            }).datepicker("setDate", dateObj);
+        $('.select2').select2();
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                $('#submit').click();//Trigger search button click event
+            }
+        });
+
+        $('#submit').click(function () {
+            debugger;
+            var actualpls = new Array();
+           
+            $("#Tables TBODY TR").each(function () {
+                debugger;
+                debugger;
+                var row = $(this);
+                var actualpl = {}; 
+             
+                actualpl.Plcode = $(".Plcode").val();//(row.find("TD").eq(0).html()).trim();
+                actualpl.Plname = $(".plname").val();// (row.find("TD").eq(1).html()).trim();
+                actualpl.Taskcode = (row.find("TD").eq(0).html()).trim();
+                actualpl.Taskname = (row.find("TD").eq(1).html()).trim();
+                actualpls.push(actualpl);
+            });
+            var testObj = {
+                //EmployeeId: $("#EmployeeId").val(),
+                //Employeename: $("#Employeename").val(),
+                //Costcentercode: $("#Costcentercode").val(),
+                //Costcenterdesc: $("#Costcenterdesc").val(),
+                ////Coachid: coach,
+                ////Coachname: coach1,
+                //Position: $("#Position").val(),
+                //Organisationunit: $("#Organisationunit").val(),
+                //Lastperformisc: $("#Lastperformisc").val(),
+                //Recentperformisc: $("#Recentperformisc").val(),
+                //Lastpromotiondate: $("#Lastpromotiondate").val(),
+                //Nextpromotiondate: $("#Nextpromotiondate").val(),
+                //Assessorid: $(".Assessorid").val(),
+                //Assessorname: $(".Assessorname").val(),
+                //Coachingstartdate: $("#Coachingstartdate").val(),
+                //Coachingenddate: $("#Coachingenddate").val(),
+                //Whentoassess: $("#Whentoassess").val(),
+                //Plname: $("#Plname").val(),
+                //Pllevel: $("#Pllevel").val(),
+                //ERNAM: $(".Plcode").val(),
+                //ERDAT: $(".plname").val(),
+                Items: actualpls
+            };
+
+            var form = $('#assasement');
+            var validator = form.data('validator');
+            validator.settings.ignore = "";
+
+            if (!$(form).valid()) {
+                $.each(tabs, function (index, item) {
+                    if ($(this).find('.field-validation-error').length > 0) {
+                        $(this).addClass('active show').siblings().removeClass('active show');
+
+                        //Active Header
+                        var a = $(this).attr('id');
+                        $.each(hid, function (index, item) {
+                            var b = $(this).attr("href").substring(1);
+                            if (a == b) {
+                                hid.removeClass('active show').siblings();
+                                $(this).addClass('active show').siblings();
+                                return false;
+                            }
+                        });
+                        return false; // exit the $.each() loop
+                    }
+                });
+            }
+            else {
+                if (testObj.Items.length == 0) {
+                    swal({
+                        type: 'error',
+                        title: "Please select atleast one item", //data.message,
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }
+                else {
+                    var plcode = $(".Plcode").val();
+                    if (plcode == "") {
+                        swal({
+                            type: 'error',
+                            title: "Plcode Is Mandatory", //data.message,
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    }
+                    else {
+                        debugger;
+                        var url = "/CoachingMaster/Types/CreateAssasement";
+                        $('#general-error').hide();
+                        $('#errors').empty();
+                        $.post(url, testObj, function (data) {
+                            //$.post(url, $('#Gen1305').serialize(), function (data) {
+                            if (data.status == "3" || data.status == "4" || data.status == "5") {
+                                if (data.status == "3") {
+                                    swal({
+                                        type: 'success',
+                                        title: data.message,
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    }).then(() => { window.location = "/CoachingMaster/Types/Index"; });;
+                                    $('#modal').modal('hide');
+                                }
+                                else {
+                                    swal({
+                                        type: 'error',
+                                        title: data.message,
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                }
+                            }
+                            else {
+                                $.each(data.errorList, function (index, value) {
+                                    $('#errors').append('<li> ' + value + ' </li>');
+                                });
+                                $('#general-error').show();
+                            }
+                        });
+                    }
+                    
+                }
+                
+
+            }
+
+        });
+    });
+
+</script>

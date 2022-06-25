@@ -1,0 +1,275 @@
+﻿@model MROCoatching.DataObjects.Models.CoachingTable.Types
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MROCoatching.DataObjects.DropDown;
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+
+    fieldset {
+        border: 1px solid #005580;
+        padding: 3px;
+    }
+
+    legend {
+        font-family: 'Wide Latin';
+        font-size: small;
+    }
+</style>
+<link rel="stylesheet" href="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+<link href="~/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#Trainee">Trainee Information</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#Coaches">Coach/Assessors Information</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+
+            <form id="items" class="form-horizontal">
+
+                @Html.AntiForgeryToken()
+                <div class="callout callout-danger error-box-holder" id="general-error" style="display:none">
+                    <h4> Please correct the following errors and sumbit again </h4>
+                    <ul id="errors" class="error-box"></ul>
+                </div>
+                @Html.ValidationSummary(true)
+                @if (ViewBag.Message != null)
+                {
+                <p style="color: red">@ViewBag.Message</p>
+                }
+                <div class="tab-content">
+
+                    <div id="Trainee" class="container tab-pane active col-sm-12">
+
+                        <fieldset class="cols-m-12">
+                            <legend>PL Type Informations</legend>
+                            <div class="row col-sm-12">
+                                <div class="col-sm-12 row">
+                                    
+                                    <div class="col-sm-6" style="pointer-events:none;">
+                                        <div class="form-group col-sm-12 row ">
+                                            <label asp-for="Costcentercode" class="form-group col-sm-5"></label>
+                                            <input asp-for="Costcentercode" class="form-control col-sm-2" readonly />
+                                            <input asp-for="Costcenterdesc" class="form-control col-sm-5" readonly />
+                                            <span asp-validation-for="Costcentercode" class="text-danger"></span>
+                                            <span asp-validation-for="Costcenterdesc" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" style="pointer-events:none;">
+                                        <div class="form-group col-sm-12 row">
+                                            <label asp-for="Position" class="form-control-label col-sm-4"></label>
+                                            <input asp-for="Position" class="form-control col-sm-3 " readonly />
+                                            <input id="Positionname" class="form-control col-sm-5 " readonly />
+                                            <span asp-validation-for="Position" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group col-sm-12 row">
+                                            <label asp-for="Lastpromotiondate" class="form-control-label col-sm-5">Promotion Last/ Next</label>
+                                            <input asp-for="Lastpromotiondate" class="form-control col-sm-3 date-field" type="text" />
+                                            <input asp-for="Nextpromotiondate" class="form-control col-sm-3 date-field" type="text" />
+                                            <span asp-validation-for="Lastpromotiondate" class="text-danger"></span>
+                                            <span asp-validation-for="Nextpromotiondate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <br />
+
+                    </div>
+                    <div id="Coaches" class="container tab-pane fade col-sm-12">
+                        <fieldset class="cols-m-12">
+                            <legend>Coach/s Informations</legend>
+                            <table class="table tab-content col-sm-12" id="Tables">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                           Task Code
+                                        </th>
+                                        <th>
+                                           Discreption
+                                        </th>
+                                        
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td class="col-sm-2" style="width:10%;">
+                                            
+                                        </td>
+                                        <td class="col-sm-2" style="width:10%;">
+                                            
+                                        </td>
+                                       
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </fieldset>
+                        <br />
+                       
+                    </div>
+
+                </div>
+                <br />
+                <div class="row cols-m-12">
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="ERNAM" class="form-control-label col-sm-4"></label>
+                                <input asp-for="ERNAM" class="form-control col-sm-8" type="text" value="@User.Identity.Name" readonly />
+                                <span asp-validation-for="ERNAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="ERDAT" class="form-control-label col-sm-4"></label>
+                                <input asp-for="ERDAT" class="form-control col-sm-8" type="text" value="@DateTime.UtcNow" readonly />
+                                <span asp-validation-for="ERNAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group col-12 text-center">
+                    <button type="button" id="submit" class="btn btn-success col-sm-4"> Create </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+<script src="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script>
+
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        })
+    });
+    $("#Taskname").val(($("#Taskcode").val() != "") ? $("#Taskcode option:selected").text() : "");
+    $("#Taskcode").change(function () {
+        debugger;
+        if ($("#Taskcode").val() != null) {
+            var url = "/CoachingMaster/Items/Gettask?Taskcode=" + $("#Taskcode").val();
+            $.get(url, function (data) {
+                debugger;
+                if (data != null) {
+                    debugger;
+                    $("#Taskname").val(data.descriptions);
+                }
+            });
+        }
+    });
+
+    $("#Plname").val(($("#Plcode").val() != "") ? $("#Plcode option:selected").text() : "");
+    $("#Plcode").change(function () {
+        debugger;
+        if ($("#Plcode").val() != null) {
+            var url = "/CoachingMaster/Items/Getposition?Plcode=" + $("#Plcode").val();
+            $.get(url, function (data) {
+                debugger;
+                if (data != null) {
+                    debugger;
+                    $("#Plname").val(data.postname);
+                    $("#Pltypes").val(data.pllevel);
+                }
+            });
+        }
+    });
+
+    $(document).ready(function () {
+        let dateObj = new Date();
+        $('.date-field').datepicker(
+            {
+                format: 'mm/dd/yyyy',
+                //startDate: dateObj,
+                autoclose: true
+            }).datepicker("setDate", dateObj);
+        $('.select2').select2();
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                $('#submit').click();//Trigger search button click event
+            }
+        });
+
+        $('#submit').click(function () {
+            debugger;
+            var form = $('#items')
+                .removeData("validator") /* added by the raw jquery.validate plugin */
+                .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                debugger;
+                var url = "/CoachingMaster/Items/Create";
+                $('#general-error').hide();
+                $('#errors').empty();
+                $.post(url, $('#items').serialize(), function (data) {
+                    if (data.status == "3" || data.status == "4" || data.status == "5") {
+                        if (data.status == "3") {
+                            swal({
+                                type: 'success',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            }).then(() => { window.location = "/CoachingMaster/Items/Index"; });;
+                            $('#modal').modal('hide');
+                        }
+                        else {
+                            swal({
+                                type: 'error',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
+                    }
+                    else {
+                        $.each(data.errorList, function (index, value) {
+                            $('#errors').append('<li> ' + value + ' </li>');
+                        });
+                        $('#general-error').show();
+                    }
+                });
+
+            }
+        });
+    });
+
+</script>

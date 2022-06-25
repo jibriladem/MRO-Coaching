@@ -1,0 +1,310 @@
+﻿@model IEnumerable<MROCoatching.DataObjects.Models.BasicTransactions.Coaching>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout3.cshtml";
+}
+<style>
+    #loader, #exportCargoRevenueAccountingloader {
+        color: #2e7c31;
+        text-shadow: 1px 1px 1px #ccc;
+    }
+
+    .modal {
+        padding-left: 10%;
+    }
+    .modalrouting {
+        padding-left: 10%;
+    }
+
+    .modal-lg {
+        max-width: 80%;
+    }
+    .modalrouting-lg {
+        max-width: 80%;
+    }
+
+    .modal-backdrop {
+        z-index: auto
+    }
+</style>
+<link href="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/iCheck/square/blue.css" rel="stylesheet">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-10">
+                <h1>Assessment List</h1>
+            </div>
+
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+            <div class="col-sm-3">
+                <h3 class="card-title">
+                    <a class="box-title fa fa-get-pocket" href="#" id="graphs"> <i class="text-success"></i>Overall Status in Graphs </a>
+                </h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover" id="TableControl">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>@Html.DisplayNameFor(m => m.EmployeeId)</th>
+                            <th>@Html.DisplayNameFor(m => m.Employeename)</th>
+                            <th>Positions</th>
+                            <th>Pl Name</th>
+                            <th>Status</th>
+                            <th>Status Details</th>
+                            <th class="text-center">Assessing</th>
+                            <th>Graphs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var cc = ""; int i = 1;
+                            if (Model != null)
+                            {
+                                var grp = Model.GroupBy(c => c.EmployeeId).ToList();
+                                var comp = 0; var allcomp = 0;
+                                var onp = 0; var allval = 0;
+                                var not = 0;
+                                foreach (var item in Model)
+                                {
+                                    var getassdate = item._dbContext.Coachingpairupshdr.Where(c => c.EmployeeId == item.EmployeeId).Select(c => c.Whentoassess).FirstOrDefault();
+                                    var currdate = DateTime.Now;
+                                    if (cc != item.EmployeeId && getassdate > currdate)
+                                    {
+                                        comp = Model.Where(c => c.Status == "C" && c.EmployeeId == item.EmployeeId).Count();
+                                        onp = Model.Where(c => c.Status == "T" && c.EmployeeId == item.EmployeeId).Count();
+                                        not = Model.Where(c => c.Status == "N" && c.EmployeeId == item.EmployeeId).Count();
+                                        allcomp = comp + onp + not;
+                                        allval = comp * 100 / allcomp;
+
+                                        <tr>
+                                            <td>@(i++)</td>
+                                            <td>@Html.DisplayFor(m => item.EmployeeId)</td>
+                                            <td>@Html.DisplayFor(m => item.Employeename)</td>
+                                            <td>
+                                                @{ var position = item._dbContext.Coachingpairupshdr.Where(c => c.EmployeeId == item.EmployeeId).Select(c => c.Position).FirstOrDefault();}
+                                                @item._dbContext.Coachingpairupshdr.Where(c => c.EmployeeId == item.EmployeeId).Select(c => c.Position).FirstOrDefault()
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.Plcode)
+                                            </td>
+                                            <td>@allval%</td>
+                                            <td>
+                                                <span style="white-space : nowrap">
+                                                    <button title="More" class="btn btn-info details" href="#" data-id="@item.ID" data-EmployeeId="@item.EmployeeId" data-position="@position" data-plname="@item.Plname" data-Plcode="@item.Plcode" data-Pllevel="@item.Pllevel">Status Detail</button>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @{
+                                                    if (allval == 100)
+                                                    {
+                                                        <span style="white-space : nowrap">
+                                                            <button title="More" class="btn btn-info col-sm-12 Assessingindex" href="#" data-id="@item.ID" data-EmployeeId="@item.EmployeeId" data-position="@position" data-plname="@item.Plcode">Assessing</button>
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span style="white-space : nowrap">
+                                                            <button title="More" class="btn btn-warning col-sm-12" href="#" data-id="@item.ID" data-EmployeeId="@item.EmployeeId" data-position="@position" data-plname="@item.Plcode" style="cursor:not-allowed;">Coaching On Progress</button>
+                                                        </span>
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                <a title="Show Status in Graph" class="box-title fa fa-bar-chart getgraphs" href="#" data-id="@item.ID" data-EmployeeId="@item.EmployeeId" data-Plcode="@item.Plcode" data-Plname="@item.Plname"> <i class="text-success"></i>  </a>
+                                            </td>
+                                        </tr>
+                                        cc = item.EmployeeId;
+                                    }
+                                    else
+                                    {
+                                        cc = item.EmployeeId;
+                                    }
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.js"></script>
+<script src="~/AdminLTE/plugins/sweetalert/sweetalert2.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="/Habtu/CRUD.js"></script>
+
+<div id="modal" class="modal fade" style="display:none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal_Title">    </h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <hr />
+            <div class="modal-body" id="modal_body">
+                <div class="overlay" id="loader">
+                    <i class="fa fa-refresh fa-spin fa-3x offset-sm-5"></i>
+
+                    <br /><br /><br />
+                </div>
+                <div id="innerModalbody">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modals" class="modal fade" style="display:none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal_Titles">    </h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <hr />
+            <div class="modal-body" id="modal_body">
+                <div class="overlay" id="loaders">
+                    <i class="fa fa-refresh fa-spin fa-3x offset-sm-5"></i>
+
+                    <br /><br /><br />
+                </div>
+                <div id="innerModalbodys">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalrouting" class="modal fade" style="display:none;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalrouting_Title">    </h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <hr />
+            <div class="modal-body" id="modalrouting_body">
+                <div class="overlay" id="loaderrouting">
+                    <i class="fa fa-refresh fa-spin fa-3x offset-sm-5"></i>
+                </div>
+
+                <div id="innerModalbodyrouting">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript"> 
+    $(function () {
+    var mainTitle = "Evaluation Details";
+    var dataTable = TableControl();
+        dataTable.on("click", ".evaluate1", function () {
+            debugger;
+            var url = "/BasicTransactions/Coachingpl/Evaluate?Employeeid=" + $(this).attr('data-EmployeeId')
+            $('#general-error').hide();
+            $('#errors').empty();
+            //var title = mainTitle;
+            var rowClicked = "#" + $(this).parents('tr').attr('id');
+            $.get(url, function (data) {
+                $('#loader').show();
+                $('#modal').modal('show');
+                $('#modal_Title').html("Evaluation Details");
+                $.get(url, function (data) {
+                    $('#innerModalbody').empty();
+                    $('#innerModalbody').html(data);
+                    $('#loader').hide();
+                    $('#modal').modal('show');
+                });
+            });
+        });
+        dataTable.on("click", ".details", function () {
+            debugger;
+            var sender = "Assessor";
+            var url = "/BasicTransactions/Assessingpl/Evaluationdtl?Employeeid=" + $(this).attr('data-EmployeeId') + '&sender=' + sender + '&Plcode=' + $(this).attr('data-Plcode') + '&Plname=' + $(this).attr('data-Plname') + '&Pllevel=' + $(this).attr('data-Pllevel')
+            $('#general-error').hide();
+            $('#errors').empty();
+            var title = mainTitle;
+            var rowClicked = "#" + $(this).parents('tr').attr('id');
+            $.get(url, function (data) {
+                $('#loader').show();
+                $('#modal').modal('show');
+                $('#modal_Title').html(title);
+                $.get(url, function (data) {
+                    $('#innerModalbody').empty();
+                    $('#innerModalbody').html(data);
+                    $('#loader').hide();
+                    $('#modal').modal('show');
+                });
+            });
+        });
+        //Assessing open
+        dataTable.on("click", ".Assessingindex", function () {
+            debugger;
+            var employeeid = $(this).attr('data-EmployeeId');
+            var systid = $(this).attr('data-id');
+            var Position = $(this).attr('data-position');
+            var Plname = $(this).attr('data-plname')
+            window.open(
+                'Indexs?Employeeid=' + employeeid + '&ID=' + systid + '&Position=' + Position + '&Plname=' + Plname,
+                '_blank'
+            )
+        });
+
+        //Assessing views
+        dataTable.on("click", ".Assessing", function () {
+            debugger;
+            var url = "/BasicTransactions/Assessingpl/Assessing?Employeeid=" + $(this).attr('data-EmployeeId') + '&ID=' + $(this).attr('data-id') + '&Position=' + $(this).attr('data-position') + '&Plname=' + $(this).attr('data-plname')
+            $('#general-error').hide();
+            $('#errors').empty();
+            //var title = mainTitle;
+            $.get(url, function (data) {
+                if (data != null) {
+                    $('#loader').show();
+                    $('#modal').modal('show');
+                    //$('#modal_Title').html(title);
+                    $.get(url, function (data) {
+                        $('#innerModalbody').empty();
+                        $('#innerModalbody').html(data);
+                        $('#loader').hide();
+                        $('#modal').modal('show');
+                    });
+                }
+            });
+        });
+
+        dataTable.on("click", ".getgraphs", function () {
+            debugger;
+            var value = $(this).attr('data-EmployeeId') + '&Plcode=' + $(this).attr('data-Plcode') + '&Plname=' + $(this).attr('data-Plname')
+            window.open(
+                'Assessmentgraph?Employeeid=' + value,
+                '_blank'
+            );
+        });
+    });
+    $('#graphs').click(function () {
+        debugger;
+        window.open(
+            'Assessmentgraph',
+            '_blank'
+        );
+    });
+</script>
+

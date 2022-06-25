@@ -1,0 +1,323 @@
+﻿@model MROCoatching.DataObjects.Models.General.Sections
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MROCoatching.DataObjects.DropDown;
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+
+    fieldset {
+        border: 1px solid #005580;
+        padding: 3px;
+    }
+
+    legend {
+        font-family: 'Wide Latin';
+        font-size: small;
+    }
+</style>
+<link rel="stylesheet" href="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+<link href="~/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-body">
+
+            <form id="sections" class="form-horizontal">
+
+                @Html.AntiForgeryToken()
+                <div class="callout callout-danger error-box-holder" id="general-error" style="display:none">
+                    <h4> Please correct the following errors and sumbit again </h4>
+                    <ul id="errors" class="error-box"></ul>
+                </div>
+                @Html.ValidationSummary(true)
+                @if (ViewBag.Message != null)
+                {
+                    <p style="color: red">@ViewBag.Message</p>
+                }
+                <fieldset class="col-sm-12">
+                    <br />
+                    <div class="row col-sm-12">
+                        <div class="col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Sectcode" class="form-control-label col-sm-4"></label>
+                                        <input asp-for="Sectcode" class="form-control col-sm-2" placeholder="XXX" />
+                                        <span asp-validation-for="Sectcode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row ">
+                                        <label asp-for="Sectname" class="form-group col-sm-4"></label>
+                                        <input asp-for="Sectname" class="form-control col-sm-8" placeholder="XXXXXXXXXXXXXXX" />
+                                        <span asp-validation-for="Sectname" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row ">
+                                        <label asp-for="Costcentercode" class="form-group col-sm-4"></label>
+                                        <div class="col-sm-6">
+                                            <select asp-for="Costcentercode" class="form-control col-sm-10 select2" asp-items="@ViewBag.Costcentercode">
+                                                <option value="">---------</option>
+                                            </select>
+                                        </div>
+                                        <span asp-validation-for="Costcentercode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Costcentername" class="form-control-label col-sm-4"></label>
+                                        <input asp-for="Costcentername" class="form-control col-sm-8" placeholder="XXXXXXXXXXXXXXX" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Costcentername" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Deptcode" class="form-control-label col-sm-4"></label>
+                                        <div class="col-sm-6">
+                                            <select asp-for="Deptcode" class="form-control col-sm-10 select2" asp-items="@ViewBag.Deptcode">
+                                                <option value="">---------</option>
+                                            </select>
+                                        </div>
+                                        <span asp-validation-for="Deptcode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row ">
+                                        <label asp-for="Deptname" class="form-group col-sm-4"></label>
+                                        <input asp-for="Deptname" class="form-control col-sm-8" readonly style="pointer-events:none;" placeholder="XXXXXXXXXXXXXXX" />
+                                        <span asp-validation-for="Deptname" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row ">
+                                        <label asp-for="Divisiondept" class="form-group col-sm-4">Division</label>
+                                        <input asp-for="Divisiondept" class="form-control col-sm-6" readonly style="pointer-events:none;" placeholder="XXXXX" />
+                                        <span asp-validation-for="Divisiondept" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Fromdate" class="form-control-label col-sm-4"></label>
+                                        <input asp-for="Fromdate" class="form-control col-sm-4 date-field" type="text" required />
+                                        <input asp-for="Toodate" class="form-control col-sm-4 date-field1" type="text" readonly style="pointer-events:none;" />
+                                        <span asp-validation-for="Fromdate" class="text-danger"></span>
+                                        <span asp-validation-for="Toodate" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row">
+                                        <label asp-for="Subsec" class="form-control-label col-sm-4"></label>
+                                        <div class="col-sm-6">
+                                            @Html.DropDownListFor(model => model.Subsec,
+                                           new SelectList(StaticLists.GET_MGMT(), "Value", "Text", "Yes"), "-------", new { @class = "form-control select2" })
+                                        </div>
+                                        <span asp-validation-for="Subsec" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-12 row ">
+                                        <label asp-for="Reportsto" class="form-group col-sm-4"></label>
+                                        <div class="col-sm-6">
+                                            <select asp-for="Reportsto" class="form-control col-sm-10 select2" asp-items="@ViewBag.Costcentercode">
+                                                <option value="">---------</option>
+                                            </select>
+                                        </div>
+                                        <span asp-validation-for="Reportsto" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+                <div class="row cols-m-12">
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="ERNAM" class="form-control-label col-sm-4"></label>
+                                <input asp-for="ERNAM" class="form-control col-sm-8" type="text" value="@User.Identity.Name" readonly />
+                                <span asp-validation-for="ERNAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group col-sm-12">
+                            <div class="form-group col-sm-12 row">
+                                <label asp-for="ERDAT" class="form-control-label col-sm-4"></label>
+                                <input asp-for="ERDAT" class="form-control col-sm-8 date-field" type="text" value="@DateTime.UtcNow" readonly />
+                                <span asp-validation-for="ERNAM" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br /> 
+                <div class="form-group col-12 text-center">
+                    <button type="button" id="submit" class="btn btn-success col-sm-4"> Create </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+<script src="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script>
+
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        })
+    });
+
+    $("#Costcentername").val(($("#Costcentercode").val() != "") ? $("#Costcentercode option:selected").text() : "");
+    $("#Costcentercode").change(function () {
+        debugger;
+        if ($("#Costcentercode").val() != null) {
+            debugger;
+
+            var url = "/General/Costcenters/Getcostcenter?Costcentercode=" + $("#Costcentercode").val();
+            $.get(url, function (data) {
+                debugger;
+                if (data != null) {
+                    debugger;
+                    $("#Costcentername").val(data.costcentername);
+                }
+            });
+
+        }
+        else {
+            debugger;
+            $("#Costcentername").val(data.costcentername);
+        }
+        if ($("#Costcentercode").val() != "") {
+            debugger;
+            disablevalue();
+        }
+        else {
+            debugger;
+            notdisable();
+        }
+    });
+    function disablevalue() {
+        $("#Subsec").val("No");
+        $("#Subsec").prop('disabled', false);
+    }
+    function notdisable() {
+        $("#Subsec").prop('disabled', false);
+        $("#Costcentername").val("");
+    }
+
+    $("#Deptname").val(($("#Deptcode").val() != "") ? $("#Deptcode option:selected").text() : "");
+    $("#Deptcode").change(function () {
+        debugger;
+        if ($("#Costcentercode").val() != null) {
+            var url = "/General/Departments/Getdepartments?Deptcode=" + $("#Deptcode").val();
+            $.get(url, function (data) {
+                debugger;
+                $("#Deptname").val(data.deptname);
+                $("#Divisiondept").val(data.divisions);
+            });
+        }
+        else if ($("#Deptcode").val() == null) {
+            $("#Deptname").val("");
+        }
+        if ($("#Deptcode").val() == "") {
+            debugger;
+            $("#Deptname").val("");
+            $("#Divisiondept").val("");
+        }
+    });
+    $(document).ready(function () {
+        let dateObj = new Date();
+        let dateObj1 = new Date();
+        dateObj1 = '12/31/9999';
+        $('.date-field').datepicker(
+            {
+                format: 'mm/dd/yyyy',
+                autoclose: true
+            }).datepicker("setDate", dateObj);
+        $('.date-field1').datepicker(
+            {
+                format: 'mm/dd/yyyy',
+                autoclose: true
+            }).datepicker("setDate", dateObj1);
+        $('.select2').select2();
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                $('#submit').click();//Trigger search button click event
+            }
+        });
+        //check whether Section have sub sections or not
+        //$("#Costcentercode").change(function () {
+            
+        //});
+
+        $('#submit').click(function () {
+            debugger;
+            var form = $('#sections')
+                .removeData("validator") /* added by the raw jquery.validate plugin */
+                .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                debugger;
+                var url = "/General/Sections/Create";
+                $('#general-error').hide();
+                $('#errors').empty();
+                $.post(url, $('#sections').serialize(), function (data) {
+                    if (data.status == "3" || data.status == "4" || data.status == "5") {
+                        if (data.status == "3") {
+                            swal({
+                                type: 'success',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            }).then(() => { window.location = "/General/Sections/Index"; });;
+                            $('#modal').modal('hide');
+                        }
+                        else {
+                            swal({
+                                type: 'error',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
+                    }
+                    else {
+                        $.each(data.errorList, function (index, value) {
+                            $('#errors').append('<li> ' + value + ' </li>');
+                        });
+                        $('#general-error').show();
+                    }
+                });
+
+            }
+        });
+    });
+
+</script>

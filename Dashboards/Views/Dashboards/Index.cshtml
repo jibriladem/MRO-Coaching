@@ -1,0 +1,256 @@
+﻿@model MROCoatching.DataObjects.Models.General.Dashboard
+@inject MROCoatching.Utilities.Utility.Menu menuBuilder
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+@{
+    ViewData["Title"] = "Graphs";
+    Layout = "~/Views/Shared/_layout3.cshtml";
+}
+<style>
+    .modal {
+        padding-left: 10%;
+    }
+
+    .modal-lg {
+        max-width: 80%;
+    }
+
+    .modal-sm {
+        max-width: 40%;
+        z-index: 10;
+    }
+
+    .modalsmall-lg {
+        max-width: 80%;
+        width: 80px;
+    }
+
+    .modal-backdrop {
+        z-index: auto;
+    }
+</style>
+
+<section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">CPU Traffic</span>
+                            <span class="info-box-number">
+                                10
+                                <small>%</small>
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-danger elevation-1">
+                            <i class="fas fa-thumbs-up"></i>
+                        </span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Likes</span>
+                            <span class="info-box-number">41,410</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="clearfix hidden-md-up"></div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-success elevation-1">
+                            <i class="fas fa-shopping-cart"></i>
+                        </span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Sales</span>
+                            <span class="info-box-number">760</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">New Members</span>
+                            <span class="info-box-number">2,000</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    
+                </div>
+
+                <div class="col-md-6">
+                    <input id="ID" type="button"  value="Show Graph" />
+                    <div class="card card-success">
+                        <div class="card-header">
+                            <h3 class="card-title">Bar Chart</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart">
+                                <canvas id="wholeChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+@*<section class="content">
+    <div class="card">
+        <div class="card-body col-sm-12 row">
+            <div class="col-sm-6">
+                <canvas id="wholeChart" style="width:50%;max-width:600px;">
+                </canvas>
+            </div>
+            <div class="col-sm-6">
+                <canvas id="wholeChart1" style="width:50%;max-width:300px;">
+                </canvas>
+            </div>
+            <div class="progress progress-md">
+                <div class="progress-bar bg-green" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="45">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script type="text/javascript">
+
+    //$(function () {
+
+    //    $("#ID").click(function () {
+    //        debugger;
+    //        $.ajax({
+    //            type: "POST",
+    //            url: "/Dashboards/Dashboards/GetAnualPlan",
+    //            data: "",
+    //            contextType: "application/json; charse=utf-8",
+    //            dataType: "json",
+    //            success: OnSuccessResult,
+    //            error: OnError
+    //        });
+
+    //        function OnSuccessResult(data) {
+
+    //        }
+    //        function OnError(err) {
+
+    //        }
+    //    });
+    //});
+   
+
+    //var ctx = document.getElementById('myChart').getContext('2d');
+    //var chart = new Chart(ctx, {
+    //    // The type of chart we want to create
+    //    type: 'bar',
+
+    //    // The data for our dataset
+    //    data: {
+    //        labels: ["January", "February", "March", "April", "May", "June", "July"],
+    //        datasets: [{
+    //            label: "My First dataset",
+    //            backgroundColor: 'rgb(255, 99, 12)',
+    //            borderColor: 'rgb(255, 99, 32)',
+    //            data: [0, 10, 5, 2, 20, 30, 45],
+    //        }]
+    //    },
+
+    //    // Configuration options go here
+    //    options: {}
+    //});
+        
+    //$(function ()
+    //{
+        /* ---------------------------------------------------------------------*/
+        var xValues = ["Not Taken", "Taken"];
+         @{
+             var yValues = "";
+             int i = 0;
+             if (Model != null)
+             {
+                 foreach (var item in Model.Wholedatas)
+                 {
+                     if (i == 0)
+                     {
+                         yValues = "[" + item.value;
+                     }
+
+                     else
+                     {
+                         yValues = yValues + ", " + item.value;
+                     }
+                     i++;
+                 }
+                 yValues = yValues + ", " + 0 + "]";
+             }
+
+
+              }
+        new Chart("wholeChart", {
+            type: "doughnut",
+            data: {
+                  labels: xValues,
+                datasets: [{
+                    backgroundColor: ["yellow", "green"],
+                    data: @yValues,
+                }]
+            },
+            options: {
+                  legend: { display: false },
+                title: {
+                      display: true,
+                    text: "Action Plan Status on Bar Chart"
+                }
+            }
+        });
+        var xValues1 = ["Not Taken"," Taken"];
+        new Chart("wholeChart1", {
+            type: "doughnut",
+            data: {
+                labels: xValues1,
+                datasets: [{
+                    backgroundColor: ["yellow", "green"],
+                    data: @yValues,
+                }]
+            },
+            options: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: "Action Plan Status on Pie chart",
+                }
+            }
+        });
+        /* ---------------------------------------------------------------------*/
+
+</script>
+
