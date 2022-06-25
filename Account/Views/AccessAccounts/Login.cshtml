@@ -1,0 +1,153 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using MROCoatching.DataObjects
+@model UserSignInRequest
+
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ET | Log in</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @*<environment include="Production">*@
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/AdminLTE/dist/css/adminlte.min.css" />
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="~/css/custometcss.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .loginlogo {
+            width: 100px;
+            height: 100px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    @*</environment>*@
+</head>
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="#">    <b>MRO Coaching </b> Login</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+
+                @*<img src="~/images/logo.png" class="loginlogo" />*@
+
+                @*<img id="skyLightHotelLogo" class="image img-fluid img-responsive" style="max-width: 100%;max-height: 100%;" src="https://ethiopiancrewportal.azurewebsites.net/Images/SkyLight.jpg" />*@
+
+                <p class="login-box-msg">Sign in to start your session</p>
+
+                <form asp-area="Account" asp-controller="Account" asp-action="Login" id="btnLoginForm" name="btnLoginForm" method="post" class="form-horizontal" role="form" asp-route-returnUrl="@ViewBag.ReturnUrl">
+
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group-sm">
+                        <div class="input-group mb-3">
+                            <input asp-for="Username" type="email" class="form-control" placeholder="Email">
+                            <div class="input-group-append">
+                                <span class="fa fa-envelope input-group-text text-primary"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input asp-for="Password" type="password" class="form-control" id="txtPassword" placeholder="Password">
+                        <div class="input-group-append">
+                            <span class="fa fa-lock input-group-text text-primary"></span>
+                        </div>
+                    </div>
+
+                    <span asp-validation-for="Password" class="text-danger"></span>
+
+                    <div class="input-group mb-3">
+                        @*<div class="col-8">
+                                <div class="checkbox icheck">
+                                    <label>
+                                        <input type="checkbox"> Remember Me
+                                    </label>
+                                </div>
+                            </div>*@
+                        <!-- /.col -->
+                        @*<div class="col-4">*@
+                        <button type="submit" formaction="@Url.Action("Login", "Account", new { area = "Account"})" id="LoginSubmit" class="btn btn-success btn-block btn-flat">Sign In</button>
+                        @*</div>*@
+                        <!-- /.col -->
+                    </div>
+                </form>
+
+                @*<div class="social-auth-links text-center mb-3">
+                        <p>- OR -</p>
+                        <a href="#" class="btn btn-block btn-primary">
+                            <i class="fa fa-facebook mr-2"></i> Sign in using Facebook
+                        </a>
+                        <a href="#" class="btn btn-block btn-danger">
+                            <i class="fa fa-google-plus mr-2"></i> Sign in using Google+
+                        </a>
+                    </div>*@
+                <!-- /.social-auth-links -->
+
+                <p class="mb-1">
+                    <a asp-action="ForgotPassword">I forgot my password</a>
+                </p>
+                @*<p class="mb-0">
+                        <a href="@Url.Action("Register", "Account", new { area = "Account"})" class="text-center">Register a new membership</a>
+                    </p>*@
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+    @*<environment include="Production">*@
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="~/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+    <!-- FastClick -->
+    <script>
+        $(function () {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+
+            $('body').on('click', "#LoginSubmit", function (e) {
+
+                e.preventDefault();
+
+                $('#btnLoginForm').attr('action', "/Account/Account/Login").submit();
+            });
+        });
+        $(document).ready(function () { $("#txtPassword").attr("autocomplete", "off"); });
+    </script>
+    @*</environment>*@
+
+</body>
+</html>
+

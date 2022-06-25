@@ -1,0 +1,210 @@
+﻿@model IEnumerable<MROCoatching.DataObjects.Models.AccountMaster.Menus>
+@using MROCoatching.DataObjects.DropDown;
+@{
+    ViewData["Title"] = "Index";
+    //Layout = "~/Views/Shared/_mainLayout.cshtml";
+    Layout = "~/Views/Shared/_layout3.cshtml";
+}
+<style>
+  /*  #loader, #exportCargoRevenueAccountingloader {
+        color: #2e7c31;
+        text-shadow: 1px 1px 1px #ccc;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }*/
+
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+</style>
+
+<link href="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/iCheck/square/blue.css" rel="stylesheet">
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Manage Menus</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Account Mangment </a></li>
+                    <li class="breadcrumb-item active"> Menus </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content"><!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <a class="box-title" href="#" id="create_new"> <i class="fa fa-plus text-primary"></i>  Create New </a>
+            </h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <div class="box-body table-responsive no-padding">
+                <table class="table" id="TableControl">
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Icon)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Url)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Privilages)
+                            </th>
+                            <th>
+                              Parent
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 0;
+                            @foreach (var item in Model)
+                            {
+                                i = i + 1;
+                        <tr>
+                            <td>@i</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                <span style="white-space : nowrap">
+                                    @Html.DisplayFor(modelItem => item.Icon)
+                                </span>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Url)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Privilages)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ParentMenuId.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ACTIND)
+                            </td>
+                            <td>
+                                <span style="white-space : nowrap">
+                                    <a title="Edit" class="box-title edit" href="#" data-id="@item.MenuId"><i class="fa fa-edit text-success"></i></a>&nbsp;
+                                    <a title="Detail" class="box-title details" href="#" data-id="@item.MenuId"><i class="fa fa-eye text-primary"></i></a>&nbsp;
+                                    <a title="DELETE" class="delete" href="#" data-id="@item.MenuId">   <i class="fa fa-trash text-danger"></i></a>
+                                </span>
+                            </td>
+                        </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+
+<div id="modal" class="modal fade" style="display:none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal_Title">    </h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                <div class="overlay" id="loader">
+                    <i class="fa fa-refresh fa-spin fa-3x offset-sm-5"></i>
+                    <br />
+                </div>
+
+                <div id="innerModalbody">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.js"></script>
+<script src="~/AdminLTE/plugins/sweetalert/sweetalert2.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('input').iCheck({ //For CheckBox
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '30%' // optional
+        });
+
+        var mainTitle = "Menus";
+        var mainUrl = "/Account/Menus/";
+        var dataTable = TableControl();
+
+        $('#create_new').click(function () {
+            var url = mainUrl + "Create";
+            var title = "Create - " + mainTitle;
+            Create(url, title);
+        });
+
+        dataTable.on("click", ".edit", function () {
+            var url = mainUrl + "Edit?id=" + $(this).attr('data-id');
+            var title = "Edit - " + mainTitle;
+            Edit(url, title);
+        });
+
+        dataTable.on("click", ".details", function () {
+            var url = mainUrl + "Details?id=" + $(this).attr('data-id');
+            var title = "Detail of " + mainTitle;
+            Details(url, title);
+        });
+
+        dataTable.on("click", ".delete", function () {
+            var url = mainUrl + "Remove?id=" + $(this).attr('data-id');
+            var title = 'Are you sure you want to delete this ?';
+            Delete($(this), url, title);
+        });
+    });
+</script>

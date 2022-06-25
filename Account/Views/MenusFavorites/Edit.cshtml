@@ -1,0 +1,145 @@
+﻿@model MROCoatching.DataObjects.Models.AccountMaster.MenusFavorite
+@using MROCoatching.DataObjects.DropDown;
+@{
+    Layout = null;
+}
+
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+</style>
+
+<link rel="stylesheet" href="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+<link rel="stylesheet" href="~/AdminLTE/plugins/datepicker/datepicker3.css" />
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-body">
+            <form id="form" class="form-horizontal">
+                @Html.AntiForgeryToken()
+                <div class="callout callout-danger error-box-holder" id="general-error" style="display:none">
+                    <h4> Please correct the following errors and sumbit again </h4>
+                    <ul id="errors" class="error-box"></ul>
+                </div>
+                @Html.ValidationSummary(true)
+                @if (ViewBag.Message != null)
+                {
+                    <p style="color: red">@ViewBag.Message</p>
+                }
+                <div class="row">
+                    <div class="col-8">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="id" />
+                        <div class="form-group">
+                            <label asp-for="MenuId" class="control-label"></label>
+                            <input asp-for="MenuId" class="form-control" />
+                            <span asp-validation-for="MenuId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ForWho" class="control-label"></label>
+                            <input asp-for="ForWho" class="form-control" />
+                            <span asp-validation-for="ForWho" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="AENAM" class="control-label"></label>
+                            <input asp-for="AENAM" value="@User.Identity.Name" class="form-control" readonly />
+                            <span asp-validation-for="AENAM" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="AEDAT" class="control-label"></label>
+                            <input asp-for="AEDAT" value="@DateTime.Now" type="text" class="form-control" readonly />
+                            <span asp-validation-for="AEDAT" class="text-danger"></span>
+                        </div>
+                        <input asp-for="ERNAM" class="form-control" hidden />
+                        <input asp-for="ERDAT" class="form-control" hidden />
+                        <div class="form-group col-sm-12 text-center">
+                            <button type="button" id="submit" class="btn btn-primary col-md-3"> Edit </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+
+<script src="~/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+
+        $('.select2').select2({
+            //dropdownParent: $('.form-control'),
+            //theme: "bootstrap"
+        });
+
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                $('#submit').click();//Trigger search button click event
+            }
+        });
+
+        $('#submit').click(function () {
+
+            debugger;
+            var form = $('#form')
+                .removeData("validator") /* added by the raw jquery.validate plugin */
+                .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+            $.validator.unobtrusive.parse(form);
+
+            if ($(form).valid()) {
+                debugger;
+                var url = "/Account/MenusFavorites/Edit";
+                $('#general-error').hide();
+                $('#errors').empty();
+                $.post(url, $('#form').serialize(), function (data) {
+                    if (data.status == "3" || data.status == "4" || data.status == "5") {
+                        if (data.status == "3") {
+                            swal({
+                                type: 'success',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            }).then(() => { window.location = "/Account/MenusFavorites/Index"; });;
+                            $('#modal').modal('hide');
+                        }
+                        else {
+                            swal({
+                                type: 'error',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
+                    }
+                    else {
+                        $.each(data.errorList, function (index, value) {
+                            $('#errors').append('<li> ' + value + ' </li>');
+                        });
+                        $('#general-error').show();
+                    }
+                });
+            }
+        });
+    });
+</script>
+

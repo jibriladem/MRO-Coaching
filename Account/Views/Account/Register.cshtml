@@ -1,0 +1,127 @@
+﻿@model MROCoatching.DataObjects.ViewModel.Identity.RegisterViewModel
+
+@{
+    ViewBag.Title = "Register";
+    ViewBag.Name = "Account Registration";
+    Layout = "~/Views/Shared/_mainLayout.cshtml";
+}
+
+@*<environment include="Production">*@
+    <!-- select2 -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/select2/select2.css">
+@*</environment>*@
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Create Account</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { area = "Account"})"><i class="fa fa-home"></i> Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Account", new { area = "Account"})"><i class="fa fa-unlock"></i> Accounts</a></li>
+                    <li class="breadcrumb-item active">Create account</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <a class="box-title" href="@Url.Action("Index", "Account", new { area = "Account"})"><i class="fa fa-user text-primary"></i>  Back to List</a>
+            </h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <form asp-controller="Account" asp-action="Register" id="AccountRegistrationForm" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
+
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group-sm">
+                    @Html.LabelFor(m => m.FullName, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+                    </div>
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group-sm-sm">
+                    @Html.LabelFor(m => m.Role, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.DropDownList("Role", (SelectList)ViewBag.Roles, new { @id = "Role", @name = "Role", @class = "form-control select2", multiple = "multiple", style = "width: 100%;" })
+                    </div>
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
+
+                <div class="form-group-sm">
+                    @Html.LabelFor(m => m.Username, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                    </div>
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="form-group-sm">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group-sm">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "off" })
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group-sm">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", autocomplete = "off" })
+                    </div>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <br />
+                <div class="form-group-sm">
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+
+@*<environment include="Production">*@
+
+    <script src="~/AdminLTE/plugins/select2/select2.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var $AddDropDownRole = $("#Role").select2({
+                maximumSelectionSize: 6
+            });
+            $('.select2').select2();
+        });
+    </script>
+@*</environment>*@

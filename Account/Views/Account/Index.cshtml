@@ -1,0 +1,158 @@
+﻿@model IEnumerable<MROCoatching.DataObjects.ViewModel.Identity.RegisterViewModel>
+
+@{
+    ViewBag.Title = "Accounts";
+    ViewBag.Name = "Account List.";
+    ViewBag.TableId = "tblAccounts";
+    ViewBag.DefualtSortingColumnIndex = 1;
+    //Layout = "~/Views/Shared/_mainLayout.cshtml";
+    Layout = "~/Views/Shared/_layout3.cshtml";
+}
+
+@*<environment include="Production">*@
+    <link href="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
+    <link href="~/AdminLTE/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+@*</environment>*@
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>
+                    List of user account @(ViewBag.UsersUnderAGivenRole != null ? Html.Raw("Under <strong> " + ViewBag.UsersUnderAGivenRole + " </strong> Role (<strong>" + Model?.Count() + "</strong>)") : "")                   
+                    @*@{
+                            if (ViewBag.UsersUnderAGivenRole != null)
+                            {
+                                @Html.Raw("<strong> " + ViewBag.UsersUnderAGivenRole + " </strong>");
+                            }
+                        }*@
+                </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { area = "Account"})"><i class="fa fa-home"></i> Home</a></li>
+                    <li class="breadcrumb-item active"><i class="fa fa-unlock"></i> Accounts</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <a class="box-title" href="@Url.Action("Register", "Account", new { area = "Account"})"><i class="fa fa-user text-primary"></i>  Create New</a>
+            </h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="box-body table-responsive no-padding">
+
+                <table id="tblAccounts" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Full Name</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Username)
+                            </th>
+                            <th>Email</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+                            foreach (var item in Model)
+                            {
+                                <tr class="odd" role="row">
+                                    <td>@(i++)</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FullName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Username)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        <span style="white-space : nowrap">
+                                            <a href="@Url.Action("Update", new { userName = item.Username })" title="EDIT">
+                                                <i class="fa fa-edit text-success"></i>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+</section>
+
+@*<environment include="Production">*@
+    <script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.js"></script>
+    <script src="~/AdminLTE/plugins/sweetalert/sweetalert2.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#tblAccounts').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "iDisplayLength": 8
+            });
+        });
+    $(document).ready(function () {
+
+            @if (ViewBag.SuccessAlertMessage != null)
+            {
+                <text>
+                    swal({
+                        position: 'center',
+                        type: 'success',
+                        title: '@ViewBag.SuccessAlertMessage',//'Your work has been saved',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                </text>
+                 ViewBag.SuccessAlertMessage = null;
+            }
+
+            @if (ViewBag.FailureAlertMessage != null)
+            {
+                <text>
+                    swal({
+                        position: 'center',
+                        type: 'error',
+                        title: '@ViewBag.FailureAlertMessage',//'Your work has been saved',
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                </text>
+                 ViewBag.FailureAlertMessage = null;
+            }
+    });
+    </script>
+@*</environment>*@

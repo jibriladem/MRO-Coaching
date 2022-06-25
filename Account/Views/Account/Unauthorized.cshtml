@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "Unauthorized";
+    //Layout = "~/Views/Shared/_mainLayout.cshtml";
+    //Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Ethiopian MRO Coatching and Assessing</title>
+
+    @*<environment include="Production">*@
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
+          asp-fallback-href="~/AdminLTE/plugins/font-awesome/css/font-awesome.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/AdminLTE/dist/css/adminlte.min.css" />
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <link href="~/css/custometcss.css" rel="stylesheet" />
+
+
+    @*<link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    @*</environment>*@
+
+    @*<environment include="Production">*@
+    <!-- jQuery -->
+    <script src="~/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.js"
+                integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+                crossorigin="anonymous"></script>*@
+
+    <!-- Bootstrap 4 -->
+    <script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="~/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="~/AdminLTE/plugins/fastclick/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/AdminLTE/dist/js/adminlte.min.js"></script>
+    <!-- Bootbox-->
+    <script src="~/AdminLTE/plugins/bootbox/bootbox.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/AdminLTE/dist/js/demo.js"></script>
+    @*</environment>*@
+</head>
+
+
+<body class="hold-transition sidebar-mini" style="padding:0px 50px 100px 100px;">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">401 Unauthorized Request</h1>
+                </div>
+                @*<div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { area = "Account"})"><i class="fa fa-home"></i> Home</a></li>
+                        <li class="breadcrumb-item active">401 Unauthorized</li>
+                    </ol>
+                </div>*@
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <section class="content">
+        <div class="card">
+
+            <div class="card-body">
+                <div class="card-header">
+                    <h3 class="card-title">Warning</h3>
+                </div>
+                <div class="error-page">
+                    <h2 class="headline text-danger">401</h2>
+                    <div class="error-content">
+                        <h3><i class="fa fa-warning text-danger"></i> Oops! Unauthorized Request.</h3>
+                        <p>
+                            You do not have a privilage to access the requested resource.
+                        </p>
+                    </div><!-- /.error-content -->
+                </div><!-- /.error-page -->
+
+            </div>
+        </div>
+    </section>
+
+    @Html.Partial("_footer")
+</body>
+</html>

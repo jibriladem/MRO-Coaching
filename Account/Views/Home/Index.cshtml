@@ -1,0 +1,526 @@
+﻿
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_layout3.cshtml";
+}
+
+@*<environment include="Production">*@
+<link href="~/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/morris/morris.css" rel="stylesheet" />
+
+<style>
+    #daterange-btn {
+        color: #007bff;
+    }
+</style>
+@*</environment>*@
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>System Account Overview</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-3">
+            <a href="@Url.Action("Index", "Roles", new { })">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fa fa-user-secret"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Roles</span>
+                        <span class="info-box-number">
+                            @ViewBag.NumberOfRoles
+                            @*<small>%</small>*@
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </a>
+            <!-- /.info-box -->
+        </div>
+
+        <!-- /.col -->
+        <div class="col-12 col-sm-6 col-md-3">
+            <a href="@Url.Action("Index", "Account", new { })">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fa fa-users"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Users</span>
+                        <span class="info-box-number">@ViewBag.NumberOfUsers</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </a>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <!-- fix for small devices only -->
+        <div class="clearfix hidden-md-up"></div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+            <a href="@Url.Action("Index", "Privileges", new { })">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fa fa-shopping-cart"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Privileges</span>
+                        <span class="info-box-number">@ViewBag.NumberOfPrevileges</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </a>
+            <!-- /.info-box -->
+        </div>
+
+        <!-- /.col -->
+        @*<div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Privileges</span>
+                        <span class="info-box-number">@ViewBag.NumberOfPrevileges</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>*@
+        <!-- /.col -->
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">User Permissions Chart</h3>
+            <small>Total Number of Users Per Role</small>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="chart-responsive">
+                        <canvas id="userRolePieChart" height="150"></canvas>
+                    </div>
+                    <!-- ./chart-responsive -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-5">
+
+                    <!-- Map card -->
+                    @*<div class="card bg-primary-gradient">
+                            <div class="card-header no-border">
+                                <h3 class="card-title">
+                                    <i title="Ammount of money moving in and out of your business" data-toggle="tooltip" class="fa fa-question-circle "></i>
+                                    Cash Flow
+                                </h3>
+                                <!-- card tools -->
+                                <div class="card-tools">
+                                    <button type="button"
+                                            class="btn btn-primary btn-sm daterange"
+                                            data-toggle="tooltip"
+                                            title="Date range">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-primary btn-sm"
+                                            data-widget="collapse"
+                                            data-toggle="tooltip"
+                                            title="Collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <!-- /.card-tools -->
+                            </div>
+                            <div class="card-body">
+                                <div class="chart" id="line-chart" style="height: 250px;"></div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer bg-transparent">
+                                <div class="row">
+                                    <div class="col-4 text-center">
+                                        <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
+                                               data-fgColor="#39CCCC">
+                                        <div class="text-white">Mail-Orders</div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-4 text-center">
+                                        <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
+                                               data-fgColor="#39CCCC">
+
+                                        <div class="text-white">Online</div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-4 text-center">
+                                        <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
+                                               data-fgColor="#39CCCC">
+
+                                        <div class="text-white">In-Store</div>
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- /.card-footer -->
+                        </div>*@
+                    <!-- /.card -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.card -->
+    @*<div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Income -Expense</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="container" style="width: 75%;">
+                            <canvas id="incomeAndExpenseChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+             </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Account -Balance</h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="width: 75%;">
+                            <canvas id="accountBalanceChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>*@
+
+    <div class="row">
+
+    </div>
+
+
+</section>
+
+
+
+@*<environment include="Production">*@
+
+<script src="~/AdminLTE/plugins/knob/jquery.knob.js"></script>
+<script src="~/AdminLTE/plugins/daterangepicker/moment.js"></script>
+<script src="~/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+
+<script src="~/AdminLTE/plugins/knob/jquery.knob.js"></script>
+<script src="~/AdminLTE/plugins/morris/morris.min.js"></script>
+
+<script src="~/AdminLTE/plugins/chart.js/Chart.min.js"></script>
+
+@*<script src="https://codepen.io/anon/pen/aWapBE.js"
+    asp-fallback-src="~/AdminLTE/plugins/aWapBE/aWapBE.js"></script>*@
+
+<script src="~/AdminLTE/plugins/aWapBE/aWapBE.js"></script>
+<script src="~/AdminLTE/plugins/raphael/raphael.min.js"></script>
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"
+    asp-fallback-src="~/AdminLTE/plugins/raphael/raphael.min.js"></script>*@
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var chartControl = document.getElementById("userRolePieChart").getContext("2d");;
+            //var chartData = [12, 19, 11, 15, 10, 13, 10, 20, 13, 11];
+            //var chartLebel = ["Insurance", "Health Care", "Transportation", "Food", "Utilities", "Bills", "Shopping", "Clothing", "Mortgage/Rent", "Others"];
+            var chartData = [];
+            var chartLebel = [];
+
+            @{
+                if(ViewBag.PermissionChartRoleUsers!=null)
+                {
+                    var permissionChartRoleUsers = ViewBag.PermissionChartRoleUsers as List<MROCoatching.DataObjects.ViewModel.Identity.PermissionChartRoleUserviewModel>;
+
+                    if(permissionChartRoleUsers != null)
+                    {
+                        foreach (var item in permissionChartRoleUsers)
+                        {
+                             <text>
+                                chartData.push(@item.NumberOfUsers);
+                                chartLebel.push('@item.RoleName');
+                             </text>
+                        }
+                    }
+                }
+            }
+
+            var userRolePieChart = new Chart(chartControl, {
+                type: 'doughnut',
+                data: {
+                    labels: chartLebel,
+                    datasets: [{
+                        label: '# of Expenses',
+                        data: chartData,
+                        backgroundColor: palette('tol', chartData.length).map(function (hex) {
+                            return '#' + hex;
+                        }),
+                        borderColor: palette('tol-sq', chartData.length).map(function (hex) {
+                            return '#' + hex;
+                        }),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            $("#userRolePieChart").click(
+                function (evt) {
+
+                    var activePoints = userRolePieChart.getElementsAtEvent(evt);
+
+                    if (activePoints.length > 0)
+                    {
+                        //get the internal index of slice in pie chart
+                        var clickedElementindex = activePoints[0]["_index"];
+
+                        //get specific label by index
+                        var label = userRolePieChart.data.labels[clickedElementindex];
+
+                        //get value by index
+                        var value = userRolePieChart.data.datasets[0].data[clickedElementindex];
+                        //alert('Label = ' + label + " value = " + value);
+                        /* other stuff that requires slice's label and value */
+
+                        window.location.href = "/Account/Account/Index?role=" + label;
+                    }
+
+                    //var url = "http://example.com/?label=" + activePoints[0].label + "&value=" + activePoints[0].value;
+                    //alert(url);
+                }
+            );
+
+         //   var line = new Morris.Line({
+         //       element: 'line-chart',
+         //       resize: true,
+         //       data: [
+         //           { y: '2011 Q1', item1: 2666, item2: 2666, item3: 2666, item4: 2666 },
+         //           { y: '2011 Q2', item1: 2778 },
+         //           { y: '2011 Q3', item1: 4912 },
+         //           { y: '2011 Q4', item1: 3767 },
+         //           { y: '2012 Q1', item1: 6810 },
+         //           { y: '2012 Q2', item1: 5670 },
+         //           { y: '2012 Q3', item1: 4820 },
+         //           { y: '2012 Q4', item1: 15073 },
+         //           { y: '2013 Q1', item1: 10687 },
+         //           { y: '2013 Q2', item1: 8432 }
+         //       ],
+         //       xkey: 'y',
+         //       ykeys: ['item1', 'item2', 'item4', 'item4'],
+         //       labels: ['Opening Balance', 'Incoming', 'Outgoing', 'Ending Balance'],
+         //       lineColors: ['#efefef'],
+         //       lineWidth: 2,
+         //       hideHover: 'auto',
+         //       gridTextColor: '#fff',
+         //       gridStrokeWidth: 0.4,
+         //       pointSize: 4,
+         //       pointStrokeColors: ['#efefef'],
+         //       gridLineColor: '#efefef',
+         //       gridTextFamily: 'Open Sans',
+         //       gridTextSize: 10
+         //   });
+         //   /* jQueryKnob */
+         //   $('.knob').knob();
+
+         //   window.chartColors = {
+         //       red: 'rgb(255, 99, 132)',
+         //       orange: 'rgb(255, 159, 64)',
+         //       yellow: 'rgb(255, 205, 86)',
+         //       green: 'rgb(75, 192, 192)',
+         //       blue: 'rgb(54, 162, 235)',
+         //       purple: 'rgb(153, 102, 255)',
+         //       grey: 'rgb(201, 203, 207)'
+         //   };
+
+         //   /* Report Chart for the second Row */
+         //   var COLORS = [
+         //       '#4dc9f6',
+         //       '#f67019',
+         //       '#f53794',
+         //       '#537bc4',
+         //       '#acc236',
+         //       '#166a8f',
+         //       '#00a950',
+         //       '#58595b',
+         //       '#8549ba'
+         //       ];
+
+         //var barChartData = {
+         //    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+         //    datasets: [{
+         //        label: 'Income',
+         //        backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+         //        borderColor: window.chartColors.red,
+         //        borderWidth: 1,
+         //        data: [10, 20, 30, 40, 60, 40, 50]
+         //    }, {
+         //        label: 'Expense',
+         //        backgroundColor: ["rgba(54, 162, 235, 0.2)"],
+         //        borderColor: window.chartColors.blue,
+         //        borderWidth: 1,
+         //        data: [10, 10, 20, 20, 55, 35, 65]
+         //    }]
+         //   };
+
+
+         //   var ctx = document.getElementById('incomeAndExpenseChart').getContext('2d');
+
+         //       window.myBar = new Chart(ctx, {
+         //           type: 'bar',
+         //           data: barChartData,
+         //           options: {
+         //               responsive: true,
+         //               legend: {
+         //                   position: 'bottom',
+         //               },
+         //               //title: {
+         //               //    display: true,
+         //               //    text: 'Chart.js Bar Chart'
+         //               //}
+         //           }
+         //   });
+
+         //   var barChartData1 = {
+         //       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+         //       datasets: [{
+         //           label: 'Amount',
+         //           "backgroundColor": ["rgba(255, 99, 132, 0.2)"],
+         //           borderColor: window.chartColors.red,
+         //           borderWidth: 1,
+         //           data: [20, 40, 60, 70, 50, 70, 90]
+         //       }]
+         //   };
+
+
+         //   var ctx1 = document.getElementById('accountBalanceChart').getContext('2d');
+         //   window.myBar = new Chart(ctx1, {
+         //       type: 'line',
+         //       data: barChartData1,
+         //       options: {
+         //           responsive: true,
+         //           legend: {
+         //               position: 'bottom',
+         //           },
+         //           //title: {
+         //           //    display: true,
+         //           //    text: 'Chart.js Bar Chart'
+         //           //}
+         //       }
+         //   });
+            /* End, Report Chart for the second Row */
+
+        });
+
+
+
+    //$('#daterange-btn').daterangepicker(
+    //    {
+    //        ranges: {
+    //            'Today': [moment(), moment()],
+    //            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    //            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+    //            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+    //            'This Month': [moment().startOf('month'), moment().endOf('month')],
+    //            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    //        },
+    //        startDate: moment().subtract(29, 'days'),
+    //        endDate: moment()
+    //    },
+    //    function (start, end) {
+    //        $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+    //        $("#dateRange").val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    //    }
+    //);
+
+</script>
+
+@*</environment>*@
+
+
+
+
+
+@*@{
+        ViewData["Title"] = "Home Page";
+        Layout = "~/Views/Shared/_mainLayout.cshtml";
+    }
+
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Welcome to the site</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">Home Page</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">System Account Overview </h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        User Permissions Chart
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+            </div>
+        </div>
+        <!-- /.card -->
+
+
+    </section>*@

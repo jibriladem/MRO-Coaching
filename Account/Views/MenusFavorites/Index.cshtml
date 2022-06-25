@@ -1,0 +1,189 @@
+﻿@model IEnumerable<MROCoatching.DataObjects.Models.AccountMaster.MenusFavorite>
+@using MROCoatching.DataObjects.DropDown;
+@{
+    ViewData["Title"] = "Index";
+    //Layout = "~/Views/Shared/_mainLayout.cshtml";
+    Layout = "~/Views/Shared/_layout3.cshtml";
+}
+<style>
+    #loader, #exportCargoRevenueAccountingloader {
+        color: #2e7c31;
+        text-shadow: 1px 1px 1px #ccc;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: inherit;
+    }
+</style>
+<link href="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
+<link href="~/AdminLTE/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Favorite Menus By each user</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Account Mangment</a></li>
+                    <li class="breadcrumb-item active"> Favorite Menus</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <a class="box-title" href="#" id="create_new"> <i class="fa fa-plus text-primary"></i>  Create New </a>
+            </h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <div class="box-body table-responsive no-padding">
+                <table id="TableControl" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.MenuId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ForWho)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ERNAM)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ERDAT)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AENAM)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AEDAT)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MenuId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ForWho)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ERNAM)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ERDAT)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AENAM)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AEDAT)
+                                </td>
+                                <td>
+                                    <span style="white-space : nowrap">
+                                        <a title="Edit" class="box-title edit" href="#" data-id="@item.id"><i class="fa fa-edit text-success"></i></a>&nbsp;
+                                        <a title="Detail" class="box-title details" href="#" data-id="@item.id"><i class="fa fa-eye text-primary"></i></a>&nbsp;
+                                        <a title="DELETE" class="delete" href="#" data-id="@item.id">   <i class="fa fa-trash text-danger"></i></a>
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+
+<div id="modal" class="modal fade" style="display:none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal_Title">    </h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <hr />
+            <div class="modal-body" id="modal_body">
+                <div class="overlay" id="loader">
+                    <i class="fa fa-refresh fa-spin fa-3x offset-sm-5"></i>
+                    <br />
+                </div>
+
+                <div id="innerModalbody">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/AdminLTE/plugins/datatables/dataTables.bootstrap4.js"></script>
+<script src="~/AdminLTE/plugins/sweetalert/sweetalert2.min.js"></script>
+<script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<link rel="stylesheet" href="~/AdminLTE/plugins/iCheck/square/blue.css">
+
+<script type="text/javascript">
+    $(function () {
+        $('input').iCheck({ //For CheckBox
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '30%' // optional
+        });
+
+        var mainTitle = "Favorite Menus";
+        var mainUrl = "/Account/MenusFavorites/";
+        var dataTable = TableControl();
+
+        $('#create_new').click(function () {
+            var url = mainUrl + "Create";
+            var title = "Create - " + mainTitle;
+            Create(url, title);
+        });
+
+        dataTable.on("click", ".edit", function () {
+            var url = mainUrl + "Edit?id=" + $(this).attr('data-id');
+            var title = "Edit - " + mainTitle;
+            Edit(url, title);
+        });
+
+        dataTable.on("click", ".details", function () {
+            var url = mainUrl + "Details?id=" + $(this).attr('data-id');
+            var title = "Detail of " + mainTitle;
+            Details(url, title);
+        });
+
+        dataTable.on("click", ".delete", function () {
+            var url = mainUrl + "Delete?id=" + $(this).attr('data-id');
+            var title = 'Are you sure you want to delete this ?';
+            Delete(url, title);
+        });
+    });
+</script>
