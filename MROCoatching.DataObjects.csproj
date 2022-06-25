@@ -1,0 +1,132 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="bin\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20211101085438_intialCreate.cs" />
+    <Compile Remove="Migrations\20211101085438_intialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20220307075449_MRO.cs" />
+    <Compile Remove="Migrations\20220307075449_MRO.Designer.cs" />
+    <Compile Remove="Migrations\20220309121705_MROCoaching.cs" />
+    <Compile Remove="Migrations\20220309121705_MROCoaching.Designer.cs" />
+    <Compile Remove="Migrations\20220315051850_datas.cs" />
+    <Compile Remove="Migrations\20220315051850_datas.Designer.cs" />
+    <Compile Remove="Migrations\20220315131001_test1.cs" />
+    <Compile Remove="Migrations\20220315131001_test1.Designer.cs" />
+    <Compile Remove="Migrations\20220317091938_tables.cs" />
+    <Compile Remove="Migrations\20220317091938_tables.Designer.cs" />
+    <Compile Remove="Migrations\20220325085815_ADDITIONAL.cs" />
+    <Compile Remove="Migrations\20220325085815_ADDITIONAL.Designer.cs" />
+    <Compile Remove="Migrations\20220401044859_costcenterupdate.cs" />
+    <Compile Remove="Migrations\20220401044859_costcenterupdate.Designer.cs" />
+    <Compile Remove="Migrations\20220401082441_teams.cs" />
+    <Compile Remove="Migrations\20220401082441_teams.Designer.cs" />
+    <Compile Remove="Migrations\20220401092732_costcenter.cs" />
+    <Compile Remove="Migrations\20220401092732_costcenter.Designer.cs" />
+    <Compile Remove="Migrations\20220401112651_others.cs" />
+    <Compile Remove="Migrations\20220401112651_others.Designer.cs" />
+    <Compile Remove="Migrations\20220406051039_teams1.cs" />
+    <Compile Remove="Migrations\20220406051039_teams1.Designer.cs" />
+    <Compile Remove="Migrations\20220406105739_teams2.cs" />
+    <Compile Remove="Migrations\20220406105739_teams2.Designer.cs" />
+    <Compile Remove="Migrations\20220408084023_PAIRUPS.cs" />
+    <Compile Remove="Migrations\20220408084023_PAIRUPS.Designer.cs" />
+    <Compile Remove="Migrations\20220411060031_category.cs" />
+    <Compile Remove="Migrations\20220411060031_category.Designer.cs" />
+    <Compile Remove="Migrations\20220412044438_coaching.cs" />
+    <Compile Remove="Migrations\20220412044438_coaching.Designer.cs" />
+    <Compile Remove="Migrations\20220412101625_taskcode.cs" />
+    <Compile Remove="Migrations\20220412101625_taskcode.Designer.cs" />
+    <Compile Remove="Migrations\20220412104622_taskcode1.cs" />
+    <Compile Remove="Migrations\20220412104622_taskcode1.Designer.cs" />
+    <Compile Remove="Migrations\20220412123201_taskcode2.cs" />
+    <Compile Remove="Migrations\20220412123201_taskcode2.Designer.cs" />
+    <Compile Remove="Migrations\20220413062629_id.cs" />
+    <Compile Remove="Migrations\20220413062629_id.Designer.cs" />
+    <Compile Remove="Migrations\20220413090516_status.cs" />
+    <Compile Remove="Migrations\20220413090516_status.Designer.cs" />
+    <Compile Remove="Migrations\20220414082839_positions.cs" />
+    <Compile Remove="Migrations\20220414082839_positions.Designer.cs" />
+    <Compile Remove="Migrations\20220414112304_pl.cs" />
+    <Compile Remove="Migrations\20220414112304_pl.Designer.cs" />
+    <Compile Remove="Migrations\20220415101555_coachannuals.cs" />
+    <Compile Remove="Migrations\20220415101555_coachannuals.Designer.cs" />
+    <Compile Remove="Migrations\20220415120300_Introductions.cs" />
+    <Compile Remove="Migrations\20220415120300_Introductions.Designer.cs" />
+    <Compile Remove="Migrations\20220418094250_plusers.cs" />
+    <Compile Remove="Migrations\20220418094250_plusers.Designer.cs" />
+    <Compile Remove="Migrations\20220418094356_plusers1.cs" />
+    <Compile Remove="Migrations\20220418094356_plusers1.Designer.cs" />
+    <Compile Remove="Migrations\20220420050702_plusers2.cs" />
+    <Compile Remove="Migrations\20220420050702_plusers2.Designer.cs" />
+    <Compile Remove="Migrations\20220420071821_EMPGROUP.cs" />
+    <Compile Remove="Migrations\20220420071821_EMPGROUP.Designer.cs" />
+    <Compile Remove="Migrations\20220421053609_plcode.cs" />
+    <Compile Remove="Migrations\20220421053609_plcode.Designer.cs" />
+    <Compile Remove="Migrations\20220427104043_coachedon.cs" />
+    <Compile Remove="Migrations\20220427104043_coachedon.Designer.cs" />
+    <Compile Remove="Migrations\20220506065441_tasks.cs" />
+    <Compile Remove="Migrations\20220506065441_tasks.Designer.cs" />
+    <Compile Remove="Migrations\20220510064659_nextpl.cs" />
+    <Compile Remove="Migrations\20220510064659_nextpl.Designer.cs" />
+    <Compile Remove="Migrations\20220510072715_post.cs" />
+    <Compile Remove="Migrations\20220510072715_post.Designer.cs" />
+    <Compile Remove="Migrations\20220510072907_post1.cs" />
+    <Compile Remove="Migrations\20220510072907_post1.Designer.cs" />
+    <Compile Remove="Migrations\20220511061605_Required.cs" />
+    <Compile Remove="Migrations\20220511061605_Required.Designer.cs" />
+    <Compile Remove="Migrations\20220511083525_coachings.cs" />
+    <Compile Remove="Migrations\20220511083525_coachings.Designer.cs" />
+    <Compile Remove="Migrations\20220512054013_ATACHAPTER.cs" />
+    <Compile Remove="Migrations\20220512054013_ATACHAPTER.Designer.cs" />
+    <Compile Remove="Migrations\20220512055442_pltype.cs" />
+    <Compile Remove="Migrations\20220512055442_pltype.Designer.cs" />
+    <Compile Remove="Migrations\20220512113326_ATACHAPTER1.cs" />
+    <Compile Remove="Migrations\20220512113326_ATACHAPTER1.Designer.cs" />
+    <Compile Remove="Migrations\20220512115733_ATACHAPTER3.cs" />
+    <Compile Remove="Migrations\20220512115733_ATACHAPTER3.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" Version="3.5.1.23" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" Version="3.5.1.57" />
+    <PackageReference Include="Castle.Windsor" Version="5.0.1" />
+    <PackageReference Include="Chart.js" Version="2.9.3" />
+    <PackageReference Include="ExpressiveAnnotations" Version="2.9.6" />
+    <PackageReference Include="FluentValidation" Version="9.2.2" />
+    <PackageReference Include="HttpPostedFileHelper" Version="1.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="3.7.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MROCoatching.Abstractions\MROCoatching.Abstractions.csproj" />
+    <ProjectReference Include="..\MROCoatching.Abstractions\MROCoatching.Abstractions.csproj" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore">
+      <HintPath>C:\Users\fishat\.nuget\packages\microsoft.aspnetcore.identity.entityframeworkcore\2.1.0\lib\netstandard2.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>-->
+
+</Project>
